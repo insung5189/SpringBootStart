@@ -1,0 +1,9 @@
+.item-text-1 {
+  text-decoration: none;
+  color: inherit;
+}
+
+.table-primary {
+  color: red;
+  color: #fff; /* 텍스트 색상을 밝은 색으로 변경 */
+}

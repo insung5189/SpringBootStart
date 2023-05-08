@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>답변 상세보기 페이지</title>
+</head>
+<body>
+<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+<h4>내용</h4>
+<a th:href="@{|/answer/list|}" class="item-text-1">
+    <input type="submit" value="답변목록보기">
+</a> <!--답변 목록으로 돌아가는 앵커태그-->
+    <div th:text="${answer.content}"></div> <!--연결을 구분하기 쉽게 하기 위해서 answer2 라고 사용함. Controller에 detail메서드와 연결됨-->
+
+
+
+<input type="button" value="뒤로가기" onclick="history.back()">
+</body>
+</html>

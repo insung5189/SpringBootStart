@@ -17,7 +17,5 @@ public class HelloLombok {
 
         System.out.println(hellolombok.getHello()); // 롬복처리한 변수를 getter로 호출
         System.out.println(hellolombok.getLombok()); // 롬복처리한 변수를 getter로 호출
-
     }
-
 }
