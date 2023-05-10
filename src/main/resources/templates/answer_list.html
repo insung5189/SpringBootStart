@@ -10,11 +10,10 @@
     <title>답변 목록 페이지</title>
 </head>
 <body>
-<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 <div layout:fragment="content" class="container my-3">
-<h1>답변 게시판</h1>
+    <h1 style="text-align: center;">(〜￣▽￣)〜  니가 아는걸 말해봐YOU!  〜(￣▽￣〜)</h1>
 <a th:href="@{|/question/list|}">
-    <input type="submit" value="질문목록보기">
+    <input type="submit" value="질문목록보기" class="list_btn_style">
 </a> <!--질문 목록으로 돌아가는 앵커태그-->
     <table class="table">
         <thead class="table-dark">

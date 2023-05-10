@@ -26,8 +26,10 @@ public class AnswerController {
         return "answer_list"; // resources 예하 templates 예하 answer_list HTML 파일로 인식해서 브라우저에 띄워줌
     }
     @GetMapping("/detail/{id}")
-    public String detail (Model model, @PathVariable("id") Integer id) { // @PathVariable을 사용해서 경로형 변수 id값을 받아온다 라고 생각하면 됨.
-        Answer answer = this.answerService.getAnswer(id);
+    public String detail (Model model, @PathVariable("id") Integer aid, @PathVariable("id") Integer qid) { // @PathVariable을 사용해서 경로형 변수 id값을 받아온다 라고 생각하면 됨.
+        Answer answer = this.answerService.getAnswer(aid); // id >> aid
+        Question question = this.questionService.getQuestion(qid); // 추가 id >> qid
+        model.addAttribute("question", question); // 추가
         model.addAttribute("answer", answer);
         return "answer_detail"; // answer_detail html 파일로 연결해줌.
     }

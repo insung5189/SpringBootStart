@@ -9,14 +9,13 @@
     <title>질문 목록 페이지</title>
 </head>
 <body>
-<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 <div layout:fragment="content" class="container my-3">
-    <h1>질문 게시판</h1>
-    <a th:href="@{|/answer/list|}">
-        <input type="submit" value="답변목록보기">
-    </a> <!--답변 목록으로 돌아가는 앵커태그-->
+    <h1 style="text-align: center;">(〜￣▽￣)〜  무엇이든 물어보세YOU!  〜(￣▽￣〜)</h1>
+    <a th:href="@{|/answer/list|}"> <!--답변 목록으로 돌아가는 앵커태그-->
+        <input type="submit" value="답변목록보기" class="list_btn_style">
+    </a>
     <table class="table">
-        <thead class="table-primary">
+        <thead class="table-danger">
         <tr>
             <th>글 번호</th>
             <th>질문 제목</th>
@@ -38,7 +37,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="question, loop : ${questionList}"> <!--여기서 th는 타임리프 문법을 사용한다, each 는 foreach 문의 반복문같은 것.-->
+        <tr th:each="question, loop : ${paging}"> <!--여기서 th는 타임리프 문법을 사용한다, each 는 foreach 문의 반복문같은 것.-->
             <td th:text="${loop.count}"></td> <!--each 문이 돌아가면서 question 변수에 값을 담아서 도출한 횟수를 출력-->
             <!--<td th:text="${question.id}"></td>--> <!--question 테이블의 id값을 바로 가져오는 것(낱개의 객체로 출력하는 것)-->
             <td>
@@ -49,6 +48,29 @@
         </tr>
         </tbody>
     </table>
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${paging.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(1, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
     <a th:href="@{/question/create}" class="btn btn-primary">질문 등록하기</a>
 </div>
 </body>

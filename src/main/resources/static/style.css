@@ -4,6 +4,19 @@
 }
 
 .table-primary {
-  color: red;
+  color: red !important; /* !important로 적용해주면 부트스트랩 커스텀에 덮어쓸 수 있다.(!important 는 힘이 짱 쎔)*/
   color: #fff; /* 텍스트 색상을 밝은 색으로 변경 */
+}
+td {
+
+}
+.d-flex justify-content-end {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+.list_btn_style {
+margin : 10px 0;
+}
+.Q_detail_btn_style {
+float: right;
 }

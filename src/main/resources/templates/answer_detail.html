@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" layout:decorate="~{layout}" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,15 +9,34 @@
     <title>답변 상세보기 페이지</title>
 </head>
 <body>
-<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
-<h4>내용</h4>
+<div layout:fragment="content" class="container my-3">
+
+<h2>내용</h2>
 <a th:href="@{|/answer/list|}" class="item-text-1">
     <input type="submit" value="답변목록보기">
 </a> <!--답변 목록으로 돌아가는 앵커태그-->
-    <div th:text="${answer.content}"></div> <!--연결을 구분하기 쉽게 하기 위해서 answer2 라고 사용함. Controller에 detail메서드와 연결됨-->
+    <div th:each="question : ${questionList}">
+        <div th:text="${question.id}"></div>
+        <h2>질문 번호: <span th:text="${answer.question_id}"></span></h2>
+    </div>
+
+
+    <div class="card my-3"><!--부트스트랩-->
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
+            <!--연결을 구분하기 쉽게 하기 위해서 answer 라고 사용함. Controller에 detail메서드와 연결됨-->
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+        </div>
+    </div><!--부트스트랩-->
 
 
 
-<input type="button" value="뒤로가기" onclick="history.back()">
+
+<input type="button" value="뒤로가기" onclick="history.back()" class="list_btn_style">
+</div>
 </body>
 </html>

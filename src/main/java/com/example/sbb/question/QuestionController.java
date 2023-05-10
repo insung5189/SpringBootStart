@@ -2,6 +2,7 @@ package com.example.sbb.question;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,27 +22,29 @@ import java.util.List;
 public class QuestionController {
     private final QuestionRepository questionRepository;
     private final QuestionService questionService;
-    @GetMapping(value = "/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
         Question question = this.questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "question_detail";
     }
     @GetMapping("/list")
-    public String list(Model model) {
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) { // url에 page내용이 없을땐 0값을 기본값으로 설정해라.
+        Page<Question> paging = this.questionService.getList(page);
+        model.addAttribute("paging", paging);
         List<Question> questionList = this.questionService.getList(); // 컨트롤러에서 바로 QuestionRepository 로 가던 구조를 중간에 Service 를 만들어서 거쳐가게끔 만듬.
         model.addAttribute("questionList", questionList);
-        return "question_list"; // resources 예하 templates 예하 question_list HTML 파일로 인식해서 브라우저에 띄워줌\
-
+        return "question_list"; // resources 예하 templates 예하 question_list HTML 파일로 인식해서 브라우저에 띄워줌
     }
-    @GetMapping("/create")
+    @GetMapping("/create") // get == 가져오다
     public String questionCreate(QuestionForm questionForm) {
         return "question_form";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create") // post == 보내다
     public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult) {
         // TODO 질문을 저장한다.
+        // (주석으로 "TODO" 를 달아놓으면 인텔리제이에서 인지해서 만약 계획된 TODO 에 관련된 로직이 작성이 안되면 커밋할때 한 번더 물어봐준다)
         if (bindingResult.hasErrors()) {
             return "question_form";
         }

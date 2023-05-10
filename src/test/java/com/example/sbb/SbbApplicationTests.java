@@ -29,9 +29,17 @@ class SbbApplicationTests {
 	@Test
 	void testJpa() {
 		/*
+		for (int i = 1; i <= 300; i++) {
+			String subject = String.format("게시글 제목:[%03d]", i);
+			String content = String.format("게시글 내용:[%03d]", i);
+			this.questionService.create(subject, content);
+		}
+		 */
+
+
 		int a = 0;
 		//데이터 저장
-		while(a<=30) {
+		while(a<=200) {
 			Question q1 = new Question();
 			q1.setSubject("Subject" + a++);
 			q1.setContent("Content");
@@ -39,19 +47,14 @@ class SbbApplicationTests {
 			this.questionRepository.save(q1);  // 첫번째 질문 저장
 			}
 
-		 */
-
 
 		/*
 		Question q2 = new Question();
-		q2.setSubject("스프링부트 모델 질문입니다.");
-		q2.setContent("id는 자동으로 생성되나요?");
+		q2.setSubject("질문게시판 빈공간 채우는 제목");
+		q2.setContent("질문게시판 빈공간 채우는 내용");
 		q2.setCreateDate(LocalDateTime.now());
 		this.questionRepository.save(q2);  // 두번째 질문 저장
 		 */
-
-
-
 
 		/*
 		//데이터 조회
@@ -61,6 +64,7 @@ class SbbApplicationTests {
 		Question q = all.get(0);
 		assertEquals("sbb가 무엇인가요?", q.getSubject());
 		 */
+
 		/*
 		//findById사용 조회
 		Optional<Question> oq = this.questionRepository.findById(1); // 질문 당 답변은 있을수도, 없을수도 있는 선택적 관계이기 때문에 옵셔널리티를 사용
@@ -69,15 +73,16 @@ class SbbApplicationTests {
 			Question q = oq.get(); // lombok을 사용한 getter로 가져와서 Question타입 q에 할당.
 			assertEquals("sbb가 무엇인가요?", q.getSubject()); // 수정된 q를 퀘스천 리포지터리에 저장.
 			// assertEquals는 엄격한 비교식
-
 		}
 		*/
+
 		/*
 		//findBySubject
 		Question q = this.questionRepository.findBySubject("sbb가 무엇인가요?"); // 엔티티의 SUBJECT 칼럼에 있는 내용을 비교
 		assertEquals(21, q.getId()); // Question 테이블의 21번 id값을 가져와서 비교
 //		findBy + 엔티티의 속성명을 사용하면 같은 리포지터리 메서드를 작성하면 해당 속성의 값으로 데이터를 조회할수 있다.
 		 */
+
 		/*
 		Question q = this.questionRepository.findBySubjectAndContent("sbb가 무엇인가요?", "sbb에 대해서 알고 싶습니다."); // 엔티티의 SUBJECT 칼럼에 있는 내용을 비교
 		assertEquals(21, q.getId()); // Question 테이블의 21번 id값을 가져와서 비교
@@ -91,7 +96,6 @@ class SbbApplicationTests {
 		assertEquals("sbb가 무엇인가요?", q.getSubject()); // Question 테이블의 sbb가 무엇인가요? 라는 subject값을 가져와서 비교
 		 */
 
-
 		/*
 		//데이터 수정
 		Optional<Question> oq = this.questionRepository.findById(21); // 옵셔널 객체에 1번 아이디를 가진 퀘스천 데이터 삽입
@@ -100,11 +104,7 @@ class SbbApplicationTests {
 		Question q = oq.get(); // Question타입 q변수에 oq.get();
 		q.setSubject("야발라히비기야"); // q에 담긴 제목을 setter를 이용해서 괄호안에 수정된 문자열로 수정한다
 		this.questionRepository.save(q); // .save()를 통해서 setter로만 남아있는 수정된 제목을 실제로 DB에 전송하여 저장한다.
-
 		 */
-
-
-
 
 		/*
 		//데이터 삭제
@@ -114,9 +114,7 @@ class SbbApplicationTests {
 		Question q = oq.get(); // oq.get으로 getter 사용해서 oq에 담겨있는 값을 가져와서 q에 대입
 		this.questionRepository.delete(q); // .delete()괄호안에 있는 값이 삭제되도록 함, 여기선 q에 대입된 값이 삭제되는 과정
 		assertEquals(6, this.questionRepository.count()); // 2개 있던 튜플 중 1개가 지워져서 1개가 되었으니 그 상태를 참, 거짓으로 판별
-
 		 */
-
 
 		/*
 		//답변 데이터 생성 후 저장
@@ -129,10 +127,7 @@ class SbbApplicationTests {
 		a.setQuestion(q);  // 어떤 질문의 답변인지 알기위해서 Question 객체가 필요하다.(위에서 oq.get으로 가져온 Question엔티티 튜플 = 외래키 셋팅)
 		a.setCreateDate(LocalDateTime.now()); // 답변 생성일로 작용할 LocalDateTime.now()를 사용해서 생성일 셋팅
 		this.answerRepository.save(a); // 위에서 setter로 셋팅된 값들을 직접 answerRepository에 보내서 저장.
-
 		 */
-
-
 
 		/*
 		//답변 조회
@@ -152,6 +147,5 @@ class SbbApplicationTests {
 		assertEquals(2, answerList.size());
 		assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
 		 */
-
 	}
 }
