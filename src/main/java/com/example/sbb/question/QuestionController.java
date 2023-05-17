@@ -28,8 +28,12 @@ public class QuestionController {
         model.addAttribute("question", question);
         return "question_detail";
     }
+
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value="page", defaultValue="1") int page) { // url에 page내용이 없을땐 0값을 기본값으로 설정해라.
+        if (page == 0) { // 페이지넘버가 0일때 page=1로 리디렉션 하라는 if문
+            return "redirect:/question/list?page=1";
+        }
         Page<Question> paging = this.questionService.getList(page);
         model.addAttribute("paging", paging);
         List<Question> questionList = this.questionService.getList(); // 컨트롤러에서 바로 QuestionRepository 로 가던 구조를 중간에 Service 를 만들어서 거쳐가게끔 만듬.
@@ -51,5 +55,4 @@ public class QuestionController {
         this.questionService.create(questionForm.getSubject(), questionForm.getContent());
         return "redirect:/question/list"; // 질문 저장후 질문목록으로 이동
     }
-
 }

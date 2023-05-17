@@ -46,7 +46,7 @@ public class QuestionService {
     public Page<Question> getList(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page -1, 10, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page-1, 10, Sort.by(sorts)); // 애초에 불러온 페이지넘버의 -1한 페이지를 불러오고 HTML에서 미루어 처리
         return this.questionRepository.findAll(pageable);
     }
 

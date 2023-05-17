@@ -57,15 +57,16 @@
     -->
 
     <!--답변 등록상자 넣기-->
-        <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
+        <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3" >
             <div th:replace="~{form_errors :: formErrorsFragment}"></div>
             <textarea th:field="*{content}" name="content" id="content" rows="10" class="form-control"></textarea>
-            <input type="submit" value="답변등록" class="btn btn-primary my-2">
+            <div class="d-flex justify-content-between">
+                <input type="submit" value="답변등록" class="btn btn-primary my-2">
+                <a th:href="@{/question/list}">
+                    <input type="button" value="질문목록보기" class="btn btn-primary my-2">
+                </a> <!--질문 목록으로 돌아가는 앵커태그-->
+            </div>
         </form>
-
-        <a th:href="@{/question/list}">
-            <input type="submit" value="질문목록보기" class="btn btn-primary" style="float: right;">
-        </a> <!--질문 목록으로 돌아가는 앵커태그-->
     </div>
 </body>
 </html>
