@@ -2,8 +2,10 @@ package com.example.sbb.question;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import com.example.sbb.answer.Answer;
+import com.example.sbb.user.SiteUser;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -28,4 +30,9 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE) // 참조속성으로 걸어둠(객체화 하면 알아서 SQL 쿼리문으로 작성해줌.)
     // 질문이 없는 답변은 의미가 없기때문에 질문이 삭제되면 알아서 답변까지 삭제되게 외래키를 규정해줌.
     private List<Answer> answerList;
+    @ManyToOne
+    private SiteUser author;
+    private LocalDateTime modifyDate;
+    @ManyToMany
+    Set<SiteUser> voter;
 }

@@ -28,15 +28,14 @@ class SbbApplicationTests {
 
 	@Test
 	void testJpa() {
-		/*
+
 		for (int i = 1; i <= 300; i++) {
 			String subject = String.format("게시글 제목:[%03d]", i);
 			String content = String.format("게시글 내용:[%03d]", i);
-			this.questionService.create(subject, content);
+			this.questionService.create(subject, content, null);
 		}
-		 */
 
-
+		/*
 		int a = 0;
 		//데이터 저장
 		while(a<=200) {
@@ -46,6 +45,7 @@ class SbbApplicationTests {
 			q1.setCreateDate(LocalDateTime.now());
 			this.questionRepository.save(q1);  // 첫번째 질문 저장
 			}
+		 */
 
 
 		/*

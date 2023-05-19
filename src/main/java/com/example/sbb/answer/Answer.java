@@ -1,11 +1,13 @@
 package com.example.sbb.answer;
 
 import com.example.sbb.question.Question;
+import com.example.sbb.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -23,4 +25,9 @@ public class Answer {
     @ManyToOne // Answer기준에서는 ManyToOne입장이라 이렇게 어노테이션 달아줌.
     private Question question; // Question 테이블의 FK값
     // SHOW COLUMNS FROM answer;
+    @ManyToOne
+    private SiteUser author;
+    private LocalDateTime modifyDate;
+    @ManyToMany
+    Set<SiteUser> voter;
 }
