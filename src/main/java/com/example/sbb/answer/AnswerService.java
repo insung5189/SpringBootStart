@@ -4,9 +4,7 @@ import com.example.sbb.DataNotFoundException;
 import com.example.sbb.question.Question;
 import com.example.sbb.user.SiteUser;
 import lombok.Data;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

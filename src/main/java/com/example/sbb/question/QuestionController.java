@@ -1,5 +1,8 @@
 package com.example.sbb.question;
 
+import com.example.sbb.comment.Comment;
+import com.example.sbb.comment.CommentForm;
+import com.example.sbb.comment.CommentRepository;
 import com.example.sbb.user.SiteUser;
 import com.example.sbb.user.UserService;
 import lombok.Data;
@@ -23,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
+
 //@Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -30,8 +35,10 @@ import java.util.List;
 public class QuestionController {
     private final QuestionService questionService;
     private final UserService userService;
+    private final QuestionRepository questionRepository;
+    private final CommentRepository commentRepository;
     @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
+    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, CommentForm commentForm) {
         Question question = this.questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "question_detail";
@@ -111,4 +118,6 @@ public class QuestionController {
         this.questionService.vote(question, siteUser);
         return String.format("redirect:/question/detail/%s", id);
     }
+
+
 }

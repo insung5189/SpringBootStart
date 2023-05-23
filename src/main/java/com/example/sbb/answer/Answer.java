@@ -1,5 +1,6 @@
 package com.example.sbb.answer;
 
+import com.example.sbb.comment.Comment;
 import com.example.sbb.question.Question;
 import com.example.sbb.user.SiteUser;
 import jakarta.persistence.*;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,6 +30,8 @@ public class Answer {
     @ManyToOne
     private SiteUser author;
     private LocalDateTime modifyDate;
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.REMOVE) // 참조속성으로 걸어둠(객체화 하면 알아서 SQL 쿼리문으로 작성해줌.)
+    private List<Comment> commentList; // CommentService에서 getList만들어야함.
     @ManyToMany
     Set<SiteUser> voter;
 }

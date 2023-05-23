@@ -14,11 +14,11 @@ import lombok.Setter;
 @Entity
 public class SiteUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // pk
     private Long id;
 
     @Column(unique = true)
-    private String username;
+    private String username; // 유저아이디
 
     private String password;
 

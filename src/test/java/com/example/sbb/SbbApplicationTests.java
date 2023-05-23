@@ -5,9 +5,13 @@ import java.util.Optional;
 
 import com.example.sbb.answer.Answer;
 import com.example.sbb.answer.AnswerRepository;
+import com.example.sbb.comment.Comment;
+import com.example.sbb.comment.CommentRepository;
 import com.example.sbb.question.Question;
 import com.example.sbb.question.QuestionRepository;
 import com.example.sbb.question.QuestionService;
+import com.example.sbb.user.SiteUser;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,15 +29,29 @@ class SbbApplicationTests {
 	private AnswerRepository answerRepository;
 	@Autowired
 	private QuestionService questionService;
+	@Autowired
+	private CommentRepository commentRepository;
 
 	@Test
 	void testJpa() {
-
+		Comment c1 = new Comment();
+		c1.setComment("두 번째 대댓글");
+		c1.setCreateDate(LocalDateTime.now());
+		this.commentRepository.save(c1);
+		/*
+		Question q2 = new Question();
+		q2.setSubject("질문게시판 빈공간 채우는 제목");
+		q2.setContent("질문게시판 빈공간 채우는 내용");
+		q2.setCreateDate(LocalDateTime.now());
+		this.questionRepository.save(q2);  // 두번째 질문 저장
+		 */
+		/*
 		for (int i = 1; i <= 300; i++) {
 			String subject = String.format("게시글 제목:[%03d]", i);
 			String content = String.format("게시글 내용:[%03d]", i);
 			this.questionService.create(subject, content, null);
 		}
+		 */
 
 		/*
 		int a = 0;
