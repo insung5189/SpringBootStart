@@ -37,6 +37,7 @@ public class QuestionController {
     private final UserService userService;
     private final QuestionRepository questionRepository;
     private final CommentRepository commentRepository;
+
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, CommentForm commentForm) {
         Question question = this.questionService.getQuestion(id);
