@@ -1,31 +1,32 @@
 <!doctype html>
 <!--느낌표(!)를 누르고 tab을 입력하면 emmit이라고 해서 기본 셋팅이 쭉 나온다.-->
-<html lang=ko layout:decorate="~{layout}" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html lang=ko layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>질문 목록 페이지</title>
 </head>
 <body>
 
-<div layout:fragment="content" class="container my-3">
+<div class="container my-3" layout:fragment="content">
     <div class="row my-3">
         <div class="col-6">
-            <a th:href="@{/question/create}" class="btn btn-primary">질문 등록하기</a>
+            <a class="btn btn-primary" th:href="@{/question/create}">질문 등록하기</a>
         </div>
         <div class="col-6">
             <div class="input-group">
-                <input type="text" id="search_kw" class="form-control" th:value="${kw}">
-                <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+                <input class="form-control" id="search_kw" th:value="${kw}" type="text">
+                <button class="btn btn-outline-secondary" id="btn_search" type="button">찾기</button>
             </div>
         </div>
     </div>
 
-    <h1 class = "board" style="text-align: center;">(〜￣▽￣)〜  무엇이든 물어봐YOU!  〜(￣▽￣〜)</h1>
+    <h1 class="board" style="text-align: center;">(〜￣▽￣)〜 무엇이든 물어봐YOU! 〜(￣▽￣〜)</h1>
     <a th:href="@{|/answer/list|}"> <!--답변 목록으로 돌아가는 앵커태그-->
-        <input type="submit" value="답변목록보기" class="list_btn_style">
+        <input class="list_btn_style" type="submit" value="답변목록보기">
     </a>
     <table class="table">
         <thead class="table-danger">
@@ -53,11 +54,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="text-center" th:each="question, loop : ${paging}"> <!--여기서 th는 타임리프 문법을 사용한다, each 는 foreach 문의 반복문같은 것.-->
-            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td> <!--each 문이 돌아가면서 question 변수에 값을 담아서 도출한 횟수를 출력-->
+        <tr class="text-center" th:each="question, loop : ${paging}">
+            <!--여기서 th는 타임리프 문법을 사용한다, each 는 foreach 문의 반복문같은 것.-->
+            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+            <!--each 문이 돌아가면서 question 변수에 값을 담아서 도출한 횟수를 출력-->
             <!--<td th:text="${question.id}"></td>--> <!--question 테이블의 id값을 바로 가져오는 것(낱개의 객체로 출력하는 것)-->
             <td class="text-start">
-                <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}" class="item-text-1"></a>
+                <a class="item-text-1" th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
                 <!--'|'를 사용하는 이유는 문자열(/question/detail/)과 데이터(${question.id})를 합치기 위해서-->
                 <span class="text-danger small ms-2"
                       th:if="${#lists.size(question.answerList) > 0}"
@@ -75,55 +78,55 @@
     <!--페이지네이션의 시작부분에 th:if문을 배치하여 해당 페이지가 존재하는지 먼저 체크-->
     <div th:if="${!paging.isEmpty()}">
         <div class="d-flex justify-content-start">
-        <a th:href="@{/question/create}" class="btn btn-primary">질문 등록하기</a>
+            <a class="btn btn-primary" th:href="@{/question/create}">질문 등록하기</a>
         </div>
         <div class="d-flex justify-content-center">
-        <!--페이징기능을 감싸는 ul태그, 부트스트랩 pagination justify-content-center를 이용해서 페이지 가운데로 배치한다.-->
-        <ul class="pagination justify-content-center">
-            <!--타임리프를 사용한 페이지네이션의 이전 버튼을 구성함.-->
-            <!--th:classappend는 페이지네이션의 처음부분에 도달했을 경우 해당 li태그 비활성화-->
-            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-                <!--이전버튼을 누르면 그 현재페이지에서 -1 한 페이지로 이동하는 앵커태그-->
-                <!--모든 페이지 링크를 href 속성에 직접 입력하는 대신 data-page 속성으로 값을 읽을 수 있도록 변경했다.-->
-                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number}">
-                    <!--페이지 버튼을 표시하는 th:classappend="${page == paging.number+1} ? 'active'"에서
-                    number+1 로 처리했기 때문에 이전버튼엔 해당 페이징넘버가 그대로 나오게 처리-->
-                    <span>이전</span>
-                </a>
-            </li>
-            <!--예를들면 paging.totalPages수가 5일땐 전체 페이지를 표시하고자 할때
-                0부터 시작하는 경우이면 4까지 표시해야 다섯페이지가 나오니까 paging.totalPages-1을 해줬지만
-                1부터 시작하는 경우엔 5라고 지정해주면 다섯페이지가 나오니까 paging.totalPages 라고만 표시해줘도 된다.-->
-            <!--th:if는 현재페이지에서 앞뒤로 5페이지씩 렌더링 하기 위해서 사용됨.-->
-            <!--th:classappend는 active를 사용해서 페이지 번호를 강조하기 위해 사용됨.
-            (page == paging.number+1로 적용해서 QuestionService에선 -1페이지를 가져오게 만들고 여기서 +1페이지로 표시하게 만들어서 한 페이지 당김.)-->
-            <!--class는 page-item 부트스트랩 CSS클래스를 추가해서 페이지 번호를 스타일링 함.-->
-            <li th:each="page: ${#numbers.sequence(1, paging.totalPages)}"
-                th:if="${page >= paging.number-5 and page <= paging.number+5}"
-                th:classappend="${page == paging.number+1} ? 'active'"
-                class="page-item">
-                <!--페이지별로 해당 페이지수를 버튼으로 표시하여 하이퍼링크로 연결하는 앵커태그-->
-                <!--모든 페이지 링크를 href 속성에 직접 입력하는 대신 data-page 속성으로 값을 읽을 수 있도록 변경했다.-->
-                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
-            </li>
-            <!--타임리프를 사용한 페이지네이션의 다음 버튼을 구성함.-->
-            <!--th:classappend는 페이지네이션의 마지막에 도달했을 경우 해당 li태그 비활성화-->
-            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
-                <!--다음버튼을 누르면 그 현재페이지에서 +1 한 페이지로 이동하는 앵커태그-->
-                <!--모든 페이지 링크를 href 속성에 직접 입력하는 대신 data-page 속성으로 값을 읽을 수 있도록 변경했다.-->
-                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+2}">
-                    <!--페이지 버튼을 표시하는 th:classappend="${page == paging.number+1} ? 'active'"에서
-                    number+1 로 처리했기 때문에 다음버튼엔 해당 페이징넘버가 +2 되어 나오게 처리-->
-                    <span>다음</span>
-                </a>
-            </li>
-        </ul>
+            <!--페이징기능을 감싸는 ul태그, 부트스트랩 pagination justify-content-center를 이용해서 페이지 가운데로 배치한다.-->
+            <ul class="pagination justify-content-center">
+                <!--타임리프를 사용한 페이지네이션의 이전 버튼을 구성함.-->
+                <!--th:classappend는 페이지네이션의 처음부분에 도달했을 경우 해당 li태그 비활성화-->
+                <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                    <!--이전버튼을 누르면 그 현재페이지에서 -1 한 페이지로 이동하는 앵커태그-->
+                    <!--모든 페이지 링크를 href 속성에 직접 입력하는 대신 data-page 속성으로 값을 읽을 수 있도록 변경했다.-->
+                    <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number}">
+                        <!--페이지 버튼을 표시하는 th:classappend="${page == paging.number+1} ? 'active'"에서
+                        number+1 로 처리했기 때문에 이전버튼엔 해당 페이징넘버가 그대로 나오게 처리-->
+                        <span>이전</span>
+                    </a>
+                </li>
+                <!--예를들면 paging.totalPages수가 5일땐 전체 페이지를 표시하고자 할때
+                    0부터 시작하는 경우이면 4까지 표시해야 다섯페이지가 나오니까 paging.totalPages-1을 해줬지만
+                    1부터 시작하는 경우엔 5라고 지정해주면 다섯페이지가 나오니까 paging.totalPages 라고만 표시해줘도 된다.-->
+                <!--th:if는 현재페이지에서 앞뒤로 5페이지씩 렌더링 하기 위해서 사용됨.-->
+                <!--th:classappend는 active를 사용해서 페이지 번호를 강조하기 위해 사용됨.
+                (page == paging.number+1로 적용해서 QuestionService에선 -1페이지를 가져오게 만들고 여기서 +1페이지로 표시하게 만들어서 한 페이지 당김.)-->
+                <!--class는 page-item 부트스트랩 CSS클래스를 추가해서 페이지 번호를 스타일링 함.-->
+                <li class="page-item"
+                    th:classappend="${page == paging.number+1} ? 'active'"
+                    th:each="page: ${#numbers.sequence(1, paging.totalPages)}"
+                    th:if="${page >= paging.number-5 and page <= paging.number+5}">
+                    <!--페이지별로 해당 페이지수를 버튼으로 표시하여 하이퍼링크로 연결하는 앵커태그-->
+                    <!--모든 페이지 링크를 href 속성에 직접 입력하는 대신 data-page 속성으로 값을 읽을 수 있도록 변경했다.-->
+                    <a class="page-link" href="javascript:void(0)" th:data-page="${page}" th:text="${page}"></a>
+                </li>
+                <!--타임리프를 사용한 페이지네이션의 다음 버튼을 구성함.-->
+                <!--th:classappend는 페이지네이션의 마지막에 도달했을 경우 해당 li태그 비활성화-->
+                <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                    <!--다음버튼을 누르면 그 현재페이지에서 +1 한 페이지로 이동하는 앵커태그-->
+                    <!--모든 페이지 링크를 href 속성에 직접 입력하는 대신 data-page 속성으로 값을 읽을 수 있도록 변경했다.-->
+                    <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+2}">
+                        <!--페이지 버튼을 표시하는 th:classappend="${page == paging.number+1} ? 'active'"에서
+                        number+1 로 처리했기 때문에 다음버튼엔 해당 페이징넘버가 +2 되어 나오게 처리-->
+                        <span>다음</span>
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
     <!-- 페이징처리 끝 -->
-    <form th:action="@{/question/list}" method="get" id="searchForm">
-        <input type="hidden" id="kw" name="kw" th:value="${kw}">
-        <input type="hidden" id="page" name="page" th:value="${paging.number}">
+    <form id="searchForm" method="get" th:action="@{/question/list}">
+        <input id="kw" name="kw" th:value="${kw}" type="hidden">
+        <input id="page" name="page" th:value="${paging.number}" type="hidden">
     </form>
 </div>
 </body>
@@ -141,5 +144,6 @@ btn_search.addEventListener('click', function() {
     document.getElementById('page').value = 1;
     document.getElementById('searchForm').submit();
 });
+
 </script>
 </html>

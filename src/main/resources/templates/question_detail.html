@@ -142,8 +142,7 @@
         </a>
         <form th:action="@{|/comment/create/${answer.id}|}" th:object="${commentForm}" method="post" class="my-3">
             <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-            <textarea sec:authorize="isAnonymous()" disabled th:field="*{comment}" class="form-control"
-                      rows="3"></textarea>
+            <textarea sec:authorize="isAnonymous()" disabled th:field="*{comment}" class="form-control" rows="3"></textarea>
             <textarea sec:authorize="isAuthenticated()" th:field="*{comment}" class="form-control" rows="3"></textarea>
             <div class="d-flex justify-content-end">
                 <input type="submit" value="대댓글 입력" class="btn btn-primary my-2">

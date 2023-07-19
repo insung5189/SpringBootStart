@@ -36,9 +36,4 @@ public class Question {
     private LocalDateTime modifyDate;
     @ManyToMany
     Set<SiteUser> voter;
-    @Column(length = 200)
-    private Double abv;
-
-    @Column(length = 200)
-    private Integer cost;
 }

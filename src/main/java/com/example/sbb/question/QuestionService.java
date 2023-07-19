@@ -70,7 +70,6 @@ public class QuestionService {
         Pageable pageable = PageRequest.of(page-1, 10, Sort.by(sorts)); // 애초에 불러온 페이지넘버의 -1한 페이지를 불러오고 HTML에서 미루어 처리
         return this.questionRepository.findAllByKeyword(kw, pageable);
     }
-
     public void modify(Question question, String subject, String content) {
         question.setSubject(subject);
         question.setContent(content);
