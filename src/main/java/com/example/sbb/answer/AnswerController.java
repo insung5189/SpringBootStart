@@ -1,11 +1,13 @@
 package com.example.sbb.answer;
 
+import com.example.sbb.comment.CommentForm;
 import com.example.sbb.question.Question;
 import com.example.sbb.question.QuestionService;
 import com.example.sbb.user.SiteUser;
 import com.example.sbb.user.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -32,13 +34,15 @@ public class AnswerController {
         return "answer_list"; // resources 예하 templates 예하 answer_list HTML 파일로 인식해서 브라우저에 띄워줌
     }
     @GetMapping("/detail/{id}")
-    public String detail (Model model, @PathVariable("id") Integer aid, @PathVariable("id") Integer qid) { // @PathVariable을 사용해서 경로형 변수 id값을 받아온다 라고 생각하면 됨.
+    public String detail (Model model, @PathVariable("id") Integer aid, Integer qid) { // @PathVariable을 사용해서 경로형 변수 id값을 받아온다 라고 생각하면 됨.
         Answer answer = this.answerService.getAnswer(aid); // id >> aid
         Question question = this.questionService.getQuestion(qid); // 추가 id >> qid
-        model.addAttribute("question", question); // 추가
+//        model.addAttribute("question", question); // 추가
         model.addAttribute("answer", answer);
         return "answer_detail"; // answer_detail html 파일로 연결해줌.
     }
+
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
     public String createAnswer(Model model, @PathVariable("id") Integer id, @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal) {
@@ -54,6 +58,30 @@ public class AnswerController {
         return String.format("redirect:/question/detail/%s#answer_%s",
                 answer.getQuestion().getId(), answer.getId());
     }
+
+
+    //호현코드
+//    @PreAuthorize("isAuthenticated()")
+//    @PostMapping("/create/{id}/{sortKeyWord}/{page}") // form 태그 method="post"로 요청되므로
+//    public String createAnswer(Model model, @PathVariable("id") Integer id, @PathVariable("page") int page, @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal) { // 요청 시 들어가는 데이터는 @RequestParam 으로
+//        // 답변을 저장할 질문 객체 불러옴
+//        Question question = this.questionService.getQuestion(id);
+//        SiteUser author = this.userService.getUser(principal.getName());
+//        // 답변 입력 validation 통과 못했을 경우 question_detail 템플릿을 다시 렌더링
+//        if (bindingResult.hasErrors()) {
+//            model.addAttribute("question", question); // 질문 상세를 출력해야 하므로 model 객체로 질문을 전달한다
+//            model.addAttribute("commentForm", new CommentForm());
+//            return "question_detail";
+//        }
+//        // 답변 저장
+//        Answer answer = this.answerService.create(question, answerForm.getContent(), author);
+//        // 답변 저장 완료 후, 기존에 있었던 질문 상세 페이지로 리턴
+//        return String.format("redirect:/question/detail/%s?page=%s#answer_%s",
+//                answer.getQuestion().getId(), page, answer.getId());
+//    }
+
+
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
