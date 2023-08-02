@@ -19377,3 +19377,35 @@ org.springframework.expression.spel.SpelEvaluationException: EL1007E: Property o
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-10.1.8.jar:10.1.8]
 	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
 
+2023-08-03 01:58:40.788  INFO 22004 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-08-03 01:58:40.792  INFO 22004 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-08-03 01:58:40.871  INFO 22004 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-08-03 02:00:58.054  INFO 13064 --- [restartedMain] com.example.sbb.SbbApplication           : Starting SbbApplication using Java 17.0.6 with PID 13064 (C:\Users\INSEONG\Desktop\국비지원 풀스택\자바 프로젝트\sbb\out\production\classes started by INSEONG in C:\Users\INSEONG\Desktop\국비지원 풀스택\자바 프로젝트\sbb)
+2023-08-03 02:00:58.058  INFO 13064 --- [restartedMain] com.example.sbb.SbbApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-08-03 02:00:58.403  INFO 13064 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-08-03 02:00:58.403  INFO 13064 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-08-03 02:00:59.280  INFO 13064 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-03 02:00:59.368  INFO 13064 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 77 ms. Found 4 JPA repository interfaces.
+2023-08-03 02:01:00.815  INFO 13064 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8020 (http)
+2023-08-03 02:01:00.840  INFO 13064 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-03 02:01:00.841  INFO 13064 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
+2023-08-03 02:01:01.005  INFO 13064 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-03 02:01:01.006  INFO 13064 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2600 ms
+2023-08-03 02:01:01.627  INFO 13064 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-08-03 02:01:01.783  INFO 13064 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.1.7.Final
+2023-08-03 02:01:02.334  INFO 13064 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-08-03 02:01:02.439  INFO 13064 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@43f403c4
+2023-08-03 02:01:02.440  INFO 13064 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-08-03 02:01:02.479  INFO 13064 --- [restartedMain] SQL dialect                              : HHH000400: Using dialect: org.hibernate.dialect.MariaDBDialect
+2023-08-03 02:01:03.816  INFO 13064 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-08-03 02:01:03.825  INFO 13064 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-08-03 02:01:04.191  WARN 13064 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.example.sbb.question.QuestionRepository
+2023-08-03 02:01:04.728  WARN 13064 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.example.sbb.user.UserRepository
+2023-08-03 02:01:04.984  WARN 13064 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-08-03 02:01:05.355  INFO 13064 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@f4a6f8b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@42c6d572, org.springframework.security.web.context.SecurityContextHolderFilter@3f08b319, org.springframework.security.web.header.HeaderWriterFilter@100c3632, org.springframework.security.web.csrf.CsrfFilter@36faf109, org.springframework.security.web.authentication.logout.LogoutFilter@deb81c0, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@5812ba7a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@797906fa, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@21fe8c4d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@40abe1d, org.springframework.security.web.access.ExceptionTranslationFilter@ccc2e3b, org.springframework.security.web.access.intercept.AuthorizationFilter@135f0519]
+2023-08-03 02:01:06.320  WARN 13064 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
+2023-08-03 02:01:06.367  INFO 13064 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8020 (http) with context path ''
+2023-08-03 02:01:06.388  INFO 13064 --- [restartedMain] com.example.sbb.SbbApplication           : Started SbbApplication in 8.91 seconds (process running for 9.497)
+2023-08-03 02:01:06.559  INFO 13064 --- [http-nio-8020-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-08-03 02:01:06.560  INFO 13064 --- [http-nio-8020-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-08-03 02:01:06.561  INFO 13064 --- [http-nio-8020-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
