@@ -46,6 +46,6 @@ public class CommentController {
         }
         Comment comment = this.commentService.create(answer, commentForm.getComment(), siteUser);
         return String.format("redirect:/question/detail/%s#answer_%s",
-                comment.getAnswer().getId(), comment.getId());
+                answer.getQuestion().getId(), answer.getId());
     }
 }

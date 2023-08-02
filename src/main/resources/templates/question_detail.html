@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="ko" layout:decorate="~{layout}" xmlns:th="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="ko" layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>질문 상세보기 페이지</title>
     <style>
   body {
@@ -13,20 +13,23 @@
   background-size: cover;
   background-repeat: no-repeat;
 }
+    .comment-form {
+        display: none;
+    }
     </style>
 </head>
 <body>
-<div layout:fragment="content" class="container my-3">
+<div class="container my-3" layout:fragment="content">
 
     <!-- 질문 -->
     <!--<h1 th:text="${question.subject}"></h1>--> <!--Controller에 detail메서드와 연결됨-->
     <h2 class="border-bottom py-2" th:text="${question.subject}"></h2> <!--부트스트랩-->
     <!--<div th:text="${question.content}"></div>--> <!--Controller에 detail메서드와 연결됨-->
-    <div class="card my-3">
+    <div class="card my-3" style="border-radius : 20px; background: #f9faf2;">
         <div class="card-body">
             <div class="card-text" th:utext="${@commonUtil.markdown(question.content)}"></div>
             <div class="d-flex justify-content-end">
-                <div th:if="${question.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                <div class="badge bg-light text-dark p-2 text-start mx-3" th:if="${question.modifyDate != null}">
                     <div class="mb-2">modified at</div>
                     <div th:text="${#temporals.format(question.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
@@ -38,17 +41,17 @@
                 </div>
             </div>
             <div class="my-3">
-                <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+                <a class="recommend btn btn-sm btn-outline-secondary" href="javascript:void(0);"
                    th:data-uri="@{|/question/vote/${question.id}|}">
                     추천
                     <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
                 </a>
-                <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary"
-                   sec:authorize="isAuthenticated()"
+                <a class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   th:href="@{|/question/modify/${question.id}|}"
                    th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
                    th:text="수정"></a>
-                <a href="javascript:void(0);" th:data-uri="@{|/question/delete/${question.id}|}"
-                   class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                <a class="delete btn btn-sm btn-outline-secondary" href="javascript:void(0);"
+                   sec:authorize="isAuthenticated()" th:data-uri="@{|/question/delete/${question.id}|}"
                    th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
                    th:text="삭제"></a>
             </div>
@@ -62,18 +65,18 @@
         th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5> <!--부트스트랩-->
 
     <!--답변 반복 시작-->
-    <div class="card my-3" th:each="answer : ${question.answerList}">
+    <div class="card my-3" style="border-radius : 20px; background: #f9faf2;" th:each="answer : ${question.answerList}">
         <a th:id="|answer_${answer.id}|"></a>
         <!--answer/detail/로 연결되는 앵커-->
-        <a th:href="@{|/answer/detail/${answer.id}|}" class="item-text-1">
+        <a class="item-text-1" th:href="@{|/answer/detail/${answer.id}|}">
             <!--답변을 감싸는 카드모양 부트스트랩 커스텀-->
-            <div class="card-body">
+            <div class="card-body" style="padding : 20px;">
                 <!--답변 텍스트에 마크다운을 적용시켜주는 요소-->
                 <div class="card-text" th:utext="${@commonUtil.markdown(answer.content)}"></div>
                 <!--해당 div안에 들어있는 요소들을 부트스트랩을 이용해서 오른쪽 끝으로 배치함-->
                 <div class="d-flex justify-content-end">
                     <!--수정을 했다면 수정일 관련 카드를 띄우게 함-->
-                    <div th:if="${answer.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="badge bg-light text-dark p-2 text-start mx-3" th:if="${answer.modifyDate != null}">
                         <div class="mb-2">modified at</div>
                         <div th:text="${#temporals.format(answer.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
                     </div>
@@ -89,34 +92,46 @@
                 <!--추천, 수정, 삭제 영역 작성자로 로그인했을때만 노출되게 설정-->
                 <div class="my-3">
                     <!--자바스크립트를 이용해서 추천버튼을 눌렀을 때 추천수가 올라가고 팝업으로 추천하겠는지 물어보는 팝업을 호출-->
-                    <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+                    <a class="recommend btn btn-sm btn-outline-secondary" href="javascript:void(0);"
                        th:data-uri="@{|/answer/vote/${answer.id}|}">
                         추천
                         <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span>
                     </a>
 
                     <!--수정버튼-->
-                    <a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary"
-                       sec:authorize="isAuthenticated()"
+                    <a class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                       th:href="@{|/answer/modify/${answer.id}|}"
                        th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
                        th:text="수정"></a>
 
                     <!--삭제버튼-->
-                    <a href="javascript:void(0);" th:data-uri="@{|/answer/delete/${answer.id}|}"
-                       class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                    <a class="delete btn btn-sm btn-outline-secondary" href="javascript:void(0);"
+                       sec:authorize="isAuthenticated()" th:data-uri="@{|/answer/delete/${answer.id}|}"
                        th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
                        th:text="삭제"></a>
+                    <button class="btn btn-sm btn-outline-secondary reply-button">댓글 입력</button>
+                    <div class="my-3">
 
+                        <form th:action="@{|/comment/create/${answer.id}|}" th:object="${commentForm}" method="post" class="my-3 comment-form">
+                            <div class="form-group">
+                                <textarea sec:authorize="isAnonymous()" disabled th:field="*{comment}" class="form-control" rows="3"></textarea>
+                                <textarea sec:authorize="isAuthenticated()" th:field="*{comment}" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="form-group text-right">
+                                <button type="submit" class="btn btn-primary" style="margin-top : 10px;">댓글 저장</button>
+                            </div>
+                        </form>
+                    </div>
                     <!--대댓글 반복 시작, question/detail/에서 답변 카드보고 안에 들어갈 수 있도록 설계중-->
                     <div>
-                        <div class="card my-3" th:each="comment : ${answer.commentList}"> <!--comment본문 반복.-->
-                            <hr><!--구획선-->
+                        <div class="card my-3" style="border-radius : 20px; background: #fcf2f2;" th:each="comment : ${answer.commentList}"> <!--comment본문 반복.-->
                             <!--마크다운-->
-                            <div class="card-text" th:utext="${@commonUtil.markdown(comment.comment)}"></div>
+                            <div class="card-text" style="padding : 16px;"
+                                 th:utext="${@commonUtil.markdown(comment.comment)}"></div>
                             <!--수정일, 생성일, 작성자 박스 오른쪽 배치-->
-                            <div class="d-flex justify-content-end">
-                                <div th:if="${comment.modifyDate != null}"
-                                     class="badge bg-light text-dark p-2 text-start mx-3">
+                            <div class="d-flex justify-content-end" style="margin : 12px;">
+                                <div class="badge bg-light text-dark p-2 text-start mx-3"
+                                     th:if="${comment.modifyDate != null}">
                                     <div class="mb-2">modified at</div>
                                     <div th:text="${#temporals.format(comment.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
                                 </div>
@@ -131,59 +146,22 @@
                         </div>
                     </div>
 
-                    <!-- 대댓글 입력 폼 시도
-                                        <div layout:fragment="content" class="container">
-                                            <form th:object="${commentForm}" method="post">
-                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                                <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-                                                <div class="mb-3">
-                                                    <label for="comment" class="form-label">내용</label>
-                                                    <textarea th:field="*{comment}" class="form-control" rows="5"></textarea>
-                                                </div>
-                                                <input type="submit" value="저장하기" class="btn btn-primary my-2">
-                                            </form>
-                                        </div>
-                                        -->
                 </div>
             </div>
         </a>
-        <form th:action="@{|/comment/create/${answer.id}|}" th:object="${commentForm}" method="post" class="my-3">
-            <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-            <textarea sec:authorize="isAnonymous()" disabled th:field="*{comment}" class="form-control" rows="3"></textarea>
-            <textarea sec:authorize="isAuthenticated()" th:field="*{comment}" class="form-control" rows="3"></textarea>
-            <div class="d-flex justify-content-end">
-                <input type="submit" value="대댓글 입력" class="btn btn-primary my-2">
-            </div>
-        </form>
+
     </div>
-    <!--대댓글 입력 폼 시도2-->
-
-
-
-
-    <!-- 답변 반복 끝  -->
-
-    <!--<div>
-        <ul>
-            <li th:each="answer : ${question2.answerList}">
-                <a th:href="@{|/answer/detail/${answer.id}|}" th:text="${answer.content}"></a>
-                답변리스트에 하이퍼링크 달기 성공!
-            </li>
-        </ul>
-        질문 상세페이지에서 답변목록에 하나하나 하이퍼링크를 달아보려고 a태그를 달았음
-    </div>
-    -->
 
     <!--답변 등록상자 넣기-->
-    <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
+    <form class="my-3" method="post" th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control"
-                  rows="10"></textarea>
-        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
+        <textarea class="form-control" disabled rows="10" sec:authorize="isAnonymous()"
+                  th:field="*{content}"></textarea>
+        <textarea class="form-control" rows="10" sec:authorize="isAuthenticated()" th:field="*{content}"></textarea>
         <div class="d-flex justify-content-between">
-            <input type="submit" value="답변등록" class="btn btn-primary my-2">
+            <input class="btn btn-primary my-2" type="submit" value="답변등록">
             <a th:href="@{/question/list}">
-                <input type="button" value="질문목록보기" class="btn btn-primary my-2">
+                <input class="btn btn-primary my-2" type="button" value="질문목록보기">
             </a> <!--질문 목록으로 돌아가는 앵커태그-->
         </div>
     </form>
@@ -206,5 +184,17 @@ Array.from(recommend_elements).forEach(function(element) {
         };
     });
 });
+    // 댓글 입력 버튼 클릭 이벤트
+   const reply_buttons = document.getElementsByClassName("reply-button");
+    Array.from(reply_buttons).forEach(function(button) {
+        button.addEventListener('click', function() {
+            const commentForm = this.closest('.card').querySelector('.comment-form');
+            if (commentForm.style.display === "block") {
+                commentForm.style.display = "none"; // 댓글 입력 폼 숨기기
+            } else {
+                commentForm.style.display = "block"; // 댓글 입력 폼 보이기
+            }
+        });
+    });
 </script>
 </html>
