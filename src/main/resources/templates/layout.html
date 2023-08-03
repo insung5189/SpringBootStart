@@ -1,19 +1,22 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="">
+<html lang="ko" xmlns="" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}" type="text/css">
     <!-- sbb CSS -->
-    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/style.css}" type="text/css">
     <title>Hello, sbb!</title>
 </head>
+
 <body>
 <!--네비바 Start-->
 <!-- 네비게이션바 링크-->
-<nav th:replace="~{navbar :: navbarFragment}"></nav>  <!--"~{navbar :: navbarFragment}" >> 경로지정하는 것-->
+<nav th:replace="~{navbar :: navbarFragment}"></nav>
+<!--"~{navbar :: navbarFragment}" >> 경로지정하는 것-->
 <!--네비바 End-->
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
 <th:block layout:fragment="content"></th:block>
@@ -27,4 +30,5 @@
 <th:block layout:fragment="script"></th:block>
 <!-- 자바스크립트 End -->
 </body>
+
 </html>

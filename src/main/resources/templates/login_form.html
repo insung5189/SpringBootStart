@@ -1,34 +1,36 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
   <style>
-  body {
-  background-image: url("https://us.123rf.com/450wm/yuttha/yuttha1611/yuttha161100075/69441821-%EC%9D%BC%EB%AA%B0-%ED%95%98%EB%8A%98-%EA%B7%B8%EB%9D%BC%EB%8D%B0%EC%9D%B4%EC%85%98-%EB%B0%B0%EA%B2%BD-%EB%8B%AC%EC%BD%A4%ED%95%9C-%EB%B0%B0%EA%B2%BD-%EC%9D%B4%EB%AF%B8%EC%A7%80.jpg?ver=6");
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-    </style>
+    body {
+      background-image: url("https://us.123rf.com/450wm/yuttha/yuttha1611/yuttha161100075/69441821-%EC%9D%BC%EB%AA%B0-%ED%95%98%EB%8A%98-%EA%B7%B8%EB%9D%BC%EB%8D%B0%EC%9D%B4%EC%85%98-%EB%B0%B0%EA%B2%BD-%EB%8B%AC%EC%BD%A4%ED%95%9C-%EB%B0%B0%EA%B2%BD-%EC%9D%B4%EB%AF%B8%EC%A7%80.jpg?ver=6");
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+  </style>
 </head>
-<div layout:fragment="content" class="container my-3">
+<div class="container my-3" layout:fragment="content">
   <div class="my-3 border-bottom">
     <div>
       <h4>로그인</h4>
     </div>
   </div>
-  <form th:action="@{/user/login}" method="post">
+  <form method="post" th:action="@{/user/login}">
     <div th:if="${param.error}">
       <div class="alert alert-danger">
         사용자ID 또는 비밀번호를 확인해 주세요.
       </div>
     </div>
     <div class="mb-3">
-      <label for="username" class="form-label">사용자ID</label>
-      <input type="text" name="username" id="username" class="form-control">
+      <label class="form-label" for="username">사용자ID</label>
+      <input class="form-control" id="username" name="username" type="text">
     </div>
     <div class="mb-3">
-      <label for="password" class="form-label">비밀번호</label>
-      <input type="password" name="password" id="password" class="form-control">
+      <label class="form-label" for="password">비밀번호</label>
+      <input class="form-control" id="password" name="password" type="password">
     </div>
-    <button type="submit" class="btn btn-primary">로그인</button>
+    <button class="btn btn-primary" type="submit">로그인</button>
   </form>
 </div>
+
 </html>

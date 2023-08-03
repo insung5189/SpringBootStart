@@ -16,9 +16,10 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
 
-    public List<Comment> getList () {
+    public List<Comment> getList() {
         return this.commentRepository.findAll();
     }
+
     public Comment getComment(Integer id) {// Integer 로 타입이 들어오면 null 값도 허용해줄 수 있음
         Optional<Comment> comment = this.commentRepository.findById(id);
         if (comment.isPresent()) {
@@ -27,6 +28,7 @@ public class CommentService {
             throw new DataNotFoundException("comment not found"); // 예외처리로 에러(DataNotFoundException)를 표시
         }
     }
+
     public Comment create(Answer answer, String comment, SiteUser author) {
         Comment c1 = new Comment();
         c1.setComment(comment);

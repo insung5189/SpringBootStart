@@ -27,14 +27,16 @@ public class AnswerController {
     private final AnswerService answerService;
     private final QuestionService questionService;
     private final UserService userService;
+
     @GetMapping("/list")
-    public String list (Model model) {
+    public String list(Model model) {
         List<Answer> answerList = this.answerService.getList(); // 컨트롤러에서 바로 AnswerRepository 로 가던 구조를 중간에 Service 를 만들어서 거쳐가게끔 만듬.
         model.addAttribute("answerList", answerList);
         return "answer_list"; // resources 예하 templates 예하 answer_list HTML 파일로 인식해서 브라우저에 띄워줌
     }
+
     @GetMapping("/detail/{id}")
-    public String detail (Model model, @PathVariable("id") Integer aid) { // @PathVariable을 사용해서 경로형 변수 id값을 받아온다 라고 생각하면 됨.
+    public String detail(Model model, @PathVariable("id") Integer aid) { // @PathVariable을 사용해서 경로형 변수 id값을 받아온다 라고 생각하면 됨.
         Answer answer = this.answerService.getAnswer(aid); // id >> aid
         Question question = answer.getQuestion();
         model.addAttribute("question", question); // 추가
@@ -81,22 +83,26 @@ public class AnswerController {
 //    }
 
 
-
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
-    public String answerModify(AnswerForm answerForm, @PathVariable("id") Integer id, Principal principal) {
+    public String answerModify(AnswerForm answerForm,
+                               @PathVariable("id") Integer id,
+                               Principal principal) {
         Answer answer = this.answerService.getAnswer(id);
         if (!answer.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
         answerForm.setContent(answer.getContent());
+        // 입력창에 기존의 답변 내용을 표시함
         return "answer_form";
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
-    public String answerModify(@Valid AnswerForm answerForm, @PathVariable("id") Integer id,
-                               BindingResult bindingResult, Principal principal) {
+    public String answerModify(@Valid AnswerForm answerForm,
+                               @PathVariable("id") Integer id,
+                               BindingResult bindingResult,
+                               Principal principal) {
         if (bindingResult.hasErrors()) {
             return "answer_form";
         }
@@ -108,6 +114,7 @@ public class AnswerController {
         return String.format("redirect:/question/detail/%s#answer_%s",
                 answer.getQuestion().getId(), answer.getId());
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String answerDelete(Principal principal, @PathVariable("id") Integer id) {
@@ -118,6 +125,7 @@ public class AnswerController {
         this.answerService.delete(answer);
         return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
     public String answerVote(Principal principal, @PathVariable("id") Integer id) {

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import org.springframework.data.domain.Sort;
 import com.example.sbb.DataNotFoundException;
 
@@ -28,6 +29,7 @@ public class QuestionService {
     private Specification<Question> search(String kw) {
         return new Specification<>() {
             private static final long serialVersionUID = 1L;
+
             @Override
             public Predicate toPredicate(Root<Question> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);  // 중복을 제거
@@ -43,7 +45,7 @@ public class QuestionService {
         };
     }
 
-    public List<Question> getList () {
+    public List<Question> getList() {
         return this.questionRepository.findAll();
     }
 
@@ -64,21 +66,25 @@ public class QuestionService {
         q.setAuthor(user);
         this.questionRepository.save(q);
     }
+
     public Page<Question> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page-1, 10, Sort.by(sorts)); // 애초에 불러온 페이지넘버의 -1한 페이지를 불러오고 HTML에서 미루어 처리
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts)); // 애초에 불러온 페이지넘버의 -1한 페이지를 불러오고 HTML에서 미루어 처리
         return this.questionRepository.findAllByKeyword(kw, pageable);
     }
+
     public void modify(Question question, String subject, String content) {
         question.setSubject(subject);
         question.setContent(content);
         question.setModifyDate(LocalDateTime.now());
         this.questionRepository.save(question);
     }
+
     public void delete(Question question) {
         this.questionRepository.delete(question);
     }
+
     public void vote(Question question, SiteUser siteUser) {
         question.getVoter().add(siteUser);
         this.questionRepository.save(question);

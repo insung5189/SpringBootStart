@@ -1,38 +1,40 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
   <style>
-  body {
-  background-image: url("https://us.123rf.com/450wm/yuttha/yuttha1611/yuttha161100075/69441821-%EC%9D%BC%EB%AA%B0-%ED%95%98%EB%8A%98-%EA%B7%B8%EB%9D%BC%EB%8D%B0%EC%9D%B4%EC%85%98-%EB%B0%B0%EA%B2%BD-%EB%8B%AC%EC%BD%A4%ED%95%9C-%EB%B0%B0%EA%B2%BD-%EC%9D%B4%EB%AF%B8%EC%A7%80.jpg?ver=6");
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-    </style>
+    body {
+      background-image: url("https://us.123rf.com/450wm/yuttha/yuttha1611/yuttha161100075/69441821-%EC%9D%BC%EB%AA%B0-%ED%95%98%EB%8A%98-%EA%B7%B8%EB%9D%BC%EB%8D%B0%EC%9D%B4%EC%85%98-%EB%B0%B0%EA%B2%BD-%EB%8B%AC%EC%BD%A4%ED%95%9C-%EB%B0%B0%EA%B2%BD-%EC%9D%B4%EB%AF%B8%EC%A7%80.jpg?ver=6");
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+  </style>
 </head>
-<div layout:fragment="content" class="container my-3">
+<div class="container my-3" layout:fragment="content">
   <div class="my-3 border-bottom">
     <div>
       <h4>회원가입</h4>
     </div>
   </div>
-  <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+  <form method="post" th:action="@{/user/signup}" th:object="${userCreateForm}">
     <div th:replace="~{form_errors :: formErrorsFragment}"></div>
     <div class="mb-3">
-      <label for="username" class="form-label">사용자ID</label>
-      <input type="text" th:field="*{username}" class="form-control">
+      <label class="form-label" for="username">사용자ID</label>
+      <input class="form-control" id="username" th:field="*{username}" type="text">
     </div>
     <div class="mb-3">
-      <label for="password1" class="form-label">비밀번호</label>
-      <input type="password" th:field="*{password1}" class="form-control">
+      <label class="form-label" for="password1">비밀번호</label>
+      <input class="form-control" id="password1" th:field="*{password1}" type="password">
     </div>
     <div class="mb-3">
-      <label for="password2" class="form-label">비밀번호 확인</label>
-      <input type="password" th:field="*{password2}" class="form-control">
+      <label class="form-label" for="password2">비밀번호 확인</label>
+      <input class="form-control" id="password2" th:field="*{password2}" type="password">
     </div>
     <div class="mb-3">
-      <label for="email" class="form-label">이메일</label>
-      <input type="email" th:field="*{email}" class="form-control">
+      <label class="form-label" for="email">이메일</label>
+      <input class="form-control" id="email" th:field="*{email}" type="email">
     </div>
-    <button type="submit" class="btn btn-primary">회원가입</button>
+    <button class="btn btn-primary" type="submit">회원가입</button>
   </form>
 </div>
+
 </html>
