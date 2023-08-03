@@ -1,5 +1,7 @@
 package com.example.sbb.question;
 
+import com.example.sbb.answer.Answer;
+import com.example.sbb.answer.AnswerService;
 import com.example.sbb.comment.Comment;
 import com.example.sbb.comment.CommentForm;
 import com.example.sbb.comment.CommentRepository;
@@ -34,6 +36,7 @@ import java.util.Optional;
 @RequestMapping("/question")
 public class QuestionController {
     private final QuestionService questionService;
+    private final AnswerService answerService;
     private final UserService userService;
     private final QuestionRepository questionRepository;
     private final CommentRepository commentRepository;
@@ -57,8 +60,10 @@ public class QuestionController {
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
 
-        List<Question> questionList = this.questionService.getList(); // 컨트롤러에서 바로 QuestionRepository 로 가던 구조를 중간에 Service 를 만들어서 거쳐가게끔 만듬.
+        List<Question> questionList = this.questionService.getList();// 컨트롤러에서 바로 QuestionRepository 로 가던 구조를 중간에 Service 를 만들어서 거쳐가게끔 만듬.
         model.addAttribute("questionList", questionList);
+        List<Answer> answerList = this.answerService.getList();
+        model.addAttribute("answer", answerList);
         return "question_list"; // resources 예하 templates 예하 question_list HTML 파일로 인식해서 브라우저에 띄워줌
     }
     @PreAuthorize("isAuthenticated()")

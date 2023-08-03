@@ -15,6 +15,8 @@
   background-repeat: no-repeat;
 }
     </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
@@ -25,14 +27,15 @@
         </div>
         <div class="col-6">
             <div class="input-group">
-                <input class="form-control" id="search_kw" th:value="${kw}" type="text" placeholder="검색어를 입력해주세요">
+                <input class="form-control" id="search_kw" placeholder="검색어를 입력해주세요" th:value="${kw}" type="text">
                 <button class="btn btn-outline-secondary" id="btn_search" type="button">찾기</button>
             </div>
         </div>
     </div>
 
     <h1 class="board" style="text-align: center;">(〜￣▽￣)〜 무엇이든 물어봐YOU! 〜(￣▽￣〜)</h1>
-    <a class="btn btn-info" th:href="@{|/answer/list|}" style="color : white; margin-bottom : 15px;"> <!--답변 목록으로 돌아가는 앵커태그-->
+    <a class="btn btn-info" style="color : white; margin-bottom : 15px;" th:href="@{|/answer/list|}">
+        <!--답변 목록으로 돌아가는 앵커태그-->
         답변 목록보기
     </a>
     <table class="table">
@@ -40,6 +43,7 @@
         <tr class="text-center">
             <th>글 번호</th>
             <th style="width:50%">질문 제목</th>
+            <th>답변</th>
             <th>글쓴이</th>
             <th>질문 작성일시</th>
         </tr>
@@ -48,6 +52,7 @@
         <tr>
             <th class="text-center">1</th>
             <th>게시판 공지사항</th>
+            <th></th>
             <th class="text-center">관리자</th>
             <th class="text-center">지금</th>
         </tr>
@@ -56,6 +61,7 @@
         <tr>
             <th class="text-center">2</th>
             <th>게시판에 욕하지 마세요</th>
+            <th></th>
             <th class="text-center">관리자</th>
             <th class="text-center">롸잇나우</th>
         </tr>
@@ -69,11 +75,27 @@
             <td class="text-start">
                 <a class="item-text-1" th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
                 <!--'|'를 사용하는 이유는 문자열(/question/detail/)과 데이터(${question.id})를 합치기 위해서-->
-                <span class="text-danger small ms-2"
-                      th:if="${#lists.size(question.answerList) > 0}"
-                      th:text="${#lists.size(question.answerList)}">
-                </span>
+<!--                답변 표시-->
+
+<!--                대댓글 표시-->
+<!--                <span th:if="${#lists.size(answer.commentList) > 0}">-->
+<!--                    <i class="fa-regular fa-comment"></i> :-->
+<!--                    <span class="text-danger small ms-2"-->
+<!--                          th:if="${#lists.size(answer.commentList) > 0}"-->
+<!--                          th:text="${#lists.size(answer.commentList)}">-->
+<!--                </span>-->
+<!--                </span>-->
+
             </td><!--낱개의 객체로 출력하는 것-->
+            <td>
+                <span>
+                    <i class="fa-regular fa-comment"></i> :
+                    <span class="text-danger small ms-2"
+
+                          th:text="${#lists.size(question.answerList)}">
+                </span>
+                </span>
+            </td>
             <td>
                 <span th:if="${question.author != null}" th:text="${question.author.username}"></span>
             </td>
@@ -151,6 +173,10 @@ btn_search.addEventListener('click', function() {
     document.getElementById('page').value = 1;
     document.getElementById('searchForm').submit();
 });
+
+
+
+
 
 </script>
 </html>
