@@ -19,8 +19,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().requestMatchers(
-                new AntPathRequestMatcher("/**")).permitAll()
+        http.authorizeHttpRequests()
+                .requestMatchers("/admin/**").hasRole("ADMIN") // admin으로 시작하는 URL에 대한 접근 권한 설정
+                .requestMatchers("/**").permitAll() // 나머지 URL은 모두 접근 허용
                 .and()
                     .csrf().ignoringRequestMatchers(
                         new AntPathRequestMatcher("/h2-console/**"))

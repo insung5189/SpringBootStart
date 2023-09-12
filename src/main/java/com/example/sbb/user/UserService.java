@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -18,13 +20,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public List<SiteUser> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     public void create(String username, String email, String password) {
         SiteUser user = new SiteUser();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(password));
+        user.setCreateDate(LocalDateTime.now());
+        user.setRole(UserRole.USER);
         this.userRepository.save(user);
     }
 

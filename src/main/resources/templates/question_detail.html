@@ -50,14 +50,16 @@
                     추천
                     <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
                 </a>
-                <a class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
-                   th:href="@{|/question/modify/${question.id}|}"
-                   th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+                <a class="btn btn-sm btn-outline-secondary" th:href="@{|/question/modify/${question.id}|}"
+                   sec:authorize="isAuthenticated()"
+                   th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (question.author != null and #authentication.principal.username == question.author.username)}"
                    th:text="수정"></a>
                 <a class="delete btn btn-sm btn-outline-secondary" href="javascript:void(0);"
-                   sec:authorize="isAuthenticated()" th:data-uri="@{|/question/delete/${question.id}|}"
-                   th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+                   sec:authorize="isAuthenticated()"
+                   th:data-uri="@{|/question/delete/${question.id}|}"
+                   th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (question.author != null and #authentication.principal.username == question.author.username)}"
                    th:text="삭제"></a>
+
             </div>
         </div>
     </div>

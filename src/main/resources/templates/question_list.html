@@ -14,9 +14,6 @@
             background-size: cover;
             background-repeat: no-repeat;
         }
-
-
-
     </style>
     <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
@@ -48,24 +45,25 @@
             <th>답변</th>
             <th>글쓴이</th>
             <th>질문 작성일시</th>
+            <th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">수정 / 삭제</th>
         </tr>
         </thead>
         <thead class="table-info">
         <tr>
             <th class="text-center">1</th>
-            <th>게시판 공지사항</th>
-            <th></th>
+            <th>[공지] 게시판 공지사항</th>
+            <th class="text-center">-</th>
             <th class="text-center">관리자</th>
-            <th class="text-center">지금</th>
+            <th class="text-center">2023-05-13 12:48</th>
         </tr>
         </thead>
         <thead class="table-info">
         <tr>
             <th class="text-center">2</th>
-            <th>게시판에 욕하지 마세요</th>
-            <th></th>
+            <th>[공지] 게시판에 욕하지 마세요</th>
+            <th class="text-center">-</th>
             <th class="text-center">관리자</th>
-            <th class="text-center">롸잇나우</th>
+            <th class="text-center">2023-05-28 13:24</th>
         </tr>
         </thead>
         <tbody>
@@ -88,6 +86,11 @@
                 <span th:if="${question.author != null}" th:text="${question.author.username}"></span>
             </td>
             <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td><!-- 낱개의 객체로 출력하는 것 -->
+            <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                <a href="javascript:void(0);"
+                   th:data-uri="@{/question/delete/{id}(id=${question.id})}"
+                   onclick="confirmDelete(event)">삭제</a>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -161,8 +164,12 @@
         document.getElementById('page').value = 1;
         document.getElementById('searchForm').submit();
     });
-
-
-
+    function confirmDelete(event) {
+        event.preventDefault();
+        if (confirm("정말로 삭제하시겠습니까?\n삭제된 질문은 되돌릴 수 없습니다.")) {
+            location.href = event.target.getAttribute("data-uri");
+            alert('삭제가 완료되었습니다.');
+        }
+    }
 </script>
 </html>

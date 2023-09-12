@@ -7,28 +7,24 @@ import com.example.sbb.comment.CommentForm;
 import com.example.sbb.comment.CommentRepository;
 import com.example.sbb.user.SiteUser;
 import com.example.sbb.user.UserService;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import com.example.sbb.answer.AnswerForm;
 import org.springframework.web.server.ResponseStatusException;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 //@Slf4j
 @RequiredArgsConstructor
@@ -42,7 +38,7 @@ public class QuestionController {
     private final CommentRepository commentRepository;
 
     @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, CommentForm commentForm) {
+    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, CommentForm commentForm, Principal principal) {
         Question question = this.questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "question_detail";
@@ -85,40 +81,45 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
-    public String questionModify(QuestionForm questionForm, @PathVariable("id") Integer id, Principal principal) {
+    public String questionModify(QuestionForm questionForm, @PathVariable("id") Integer id, @AuthenticationPrincipal UserDetails userDetails) {
         Question question = this.questionService.getQuestion(id);
-        if (!question.getAuthor().getUsername().equals(principal.getName())) {
+        if (userDetails.getUsername().equals(question.getAuthor().getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            questionForm.setSubject(question.getSubject());
+            questionForm.setContent(question.getContent());
+            return "question_form";
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        questionForm.setSubject(question.getSubject());
-        questionForm.setContent(question.getContent());
-        return "question_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String questionModify(@Valid QuestionForm questionForm, BindingResult bindingResult,
-                                 Principal principal, @PathVariable("id") Integer id) {
+                                 @AuthenticationPrincipal UserDetails userDetails, @PathVariable("id") Integer id) {
         if (bindingResult.hasErrors()) {
             return "question_form";
         }
         Question question = this.questionService.getQuestion(id);
-        if (!question.getAuthor().getUsername().equals(principal.getName())) {
+        if (userDetails.getUsername().equals(question.getAuthor().getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            this.questionService.modify(question, questionForm.getSubject(), questionForm.getContent());
+            return String.format("redirect:/question/detail/%s", id);
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        this.questionService.modify(question, questionForm.getSubject(), questionForm.getContent());
-        return String.format("redirect:/question/detail/%s", id);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
-    public String questionDelete(Principal principal, @PathVariable("id") Integer id) {
+    public String questionDelete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("id") Integer id) {
         Question question = this.questionService.getQuestion(id);
-        if (!question.getAuthor().getUsername().equals(principal.getName())) {
+
+        if (!userDetails.getUsername().equals(question.getAuthor().getUsername()) || !userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            // 현재 사용자가 질문 작성자거나 관리자인 경우에만 삭제 허용
+            this.questionService.delete(question);
+            return "redirect:/";
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
-        this.questionService.delete(question);
-        return "redirect:/";
     }
 
     @PreAuthorize("isAuthenticated()")

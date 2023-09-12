@@ -13,6 +13,11 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/user/signup}">회원가입</a>
         </li>
+
+        <!-- 관리자만 접근 가능한 관리자 페이지 버튼 -->
+        <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+          <a class="nav-link" th:href="@{/admin}">관리자 페이지</a>
+        </li>
       </ul>
     </div>
   </div>

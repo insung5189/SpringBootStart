@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -83,47 +86,46 @@ public class AnswerController {
 //    }
 
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #username == answer.author.username)")
     @GetMapping("/modify/{id}")
-    public String answerModify(AnswerForm answerForm,
-                               @PathVariable("id") Integer id,
-                               Principal principal) {
+    public String answerModify(AnswerForm answerForm, @PathVariable("id") Integer id, @AuthenticationPrincipal UserDetails userDetails) {
         Answer answer = this.answerService.getAnswer(id);
-        if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+        if (userDetails.getUsername().equals(answer.getAuthor().getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            answerForm.setContent(answer.getContent());
+            return "question_form";
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        answerForm.setContent(answer.getContent());
-        // 입력창에 기존의 답변 내용을 표시함
-        return "answer_form";
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #username == answer.author.username)")
     @PostMapping("/modify/{id}")
-    public String answerModify(@Valid AnswerForm answerForm,
-                               @PathVariable("id") Integer id,
-                               BindingResult bindingResult,
-                               Principal principal) {
+    public String answerModify(@Valid AnswerForm answerForm, @PathVariable("id") Integer id, BindingResult bindingResult,
+                               @AuthenticationPrincipal UserDetails userDetails) {
         if (bindingResult.hasErrors()) {
             return "answer_form";
         }
         Answer answer = this.answerService.getAnswer(id);
-        if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+        if (userDetails.getUsername().equals(answer.getAuthor().getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            this.answerService.modify(answer, answerForm.getContent());
+            return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        this.answerService.modify(answer, answerForm.getContent());
-        return String.format("redirect:/question/detail/%s#answer_%s",
-                answer.getQuestion().getId(), answer.getId());
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #username == answer.author.username)")
     @GetMapping("/delete/{id}")
-    public String answerDelete(Principal principal, @PathVariable("id") Integer id) {
+    public String answerDelete(@PathVariable("id") Integer id, @AuthenticationPrincipal UserDetails userDetails) {
         Answer answer = this.answerService.getAnswer(id);
-        if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+
+        if (!userDetails.getUsername().equals(answer.getAuthor().getUsername()) || !userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            // 현재 사용자가 질문 작성자거나 관리자인 경우에만 삭제 허용
+            this.answerService.delete(answer);
+            return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
-        this.answerService.delete(answer);
-        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
     }
 
     @PreAuthorize("isAuthenticated()")

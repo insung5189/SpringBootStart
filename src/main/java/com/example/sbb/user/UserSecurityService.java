@@ -1,5 +1,6 @@
 package com.example.sbb.user;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +32,9 @@ public class UserSecurityService implements UserDetailsService {
         }
         SiteUser siteUser = _siteUser.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if ("admin".equals(username)) {
-            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
-        }
+        authorities.add(new SimpleGrantedAuthority(siteUser.getRole().getValue()));
+        siteUser.setLastLoginDate(LocalDateTime.now());
+        userRepository.save(siteUser);
         return new User(siteUser.getUsername(), siteUser.getPassword(), authorities);
     }
 }
