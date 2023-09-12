@@ -71,7 +71,7 @@
         th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5> <!--부트스트랩-->
 
     <!--답변 반복 시작-->
-    <div class="card my-3" style="border-radius : 20px; background: #f9faf2;" th:each="answer : ${question.answerList}">
+    <div class="card my-3" style="border-radius : 20px; background: #f9faf2;" th:each="answer : ${answerList}">
         <a th:id="|answer_${answer.id}|"></a>
         <!--answer/detail/로 연결되는 앵커-->
         <a class="item-text-1" th:href="@{|/answer/detail/${answer.id}|}">
@@ -105,15 +105,17 @@
                     </a>
 
                     <!--수정버튼-->
-                    <a class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                    <a class="btn btn-sm btn-outline-secondary"
                        th:href="@{|/answer/modify/${answer.id}|}"
-                       th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username)}"
                        th:text="수정"></a>
 
                     <!--삭제버튼-->
                     <a class="delete btn btn-sm btn-outline-secondary" href="javascript:void(0);"
-                       sec:authorize="isAuthenticated()" th:data-uri="@{|/answer/delete/${answer.id}|}"
-                       th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
+                       sec:authorize="isAuthenticated()"
+                       th:data-uri="@{|/answer/delete/${answer.id}|}"
+                       th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username)}"
                        th:text="삭제"></a>
                     <button class="btn btn-sm btn-outline-secondary reply-button">댓글 입력</button>
                     <div class="my-3">

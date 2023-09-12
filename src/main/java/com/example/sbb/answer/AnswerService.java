@@ -20,6 +20,9 @@ public class AnswerService {
     public List<Answer> getList () {
         return this.answerRepository.findAll();
     }
+    public List<Answer> getAnswersForQuestion(Integer questionId) {
+        return answerRepository.findByQuestionId(questionId);
+    }
     public Answer getAnswer(Integer id) {// Integer 로 타입이 들어오면 null 값도 허용해줄 수 있음
         Optional<Answer> answer = this.answerRepository.findById(id);
         if (answer.isPresent()) {

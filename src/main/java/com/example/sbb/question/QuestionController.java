@@ -40,6 +40,8 @@ public class QuestionController {
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, CommentForm commentForm, Principal principal) {
         Question question = this.questionService.getQuestion(id);
+        List<Answer> answerList = this.answerService.getAnswersForQuestion(id);
+        model.addAttribute("answerList", answerList); // 모든 답변을 리스트로 추가
         model.addAttribute("question", question);
         return "question_detail";
     }
