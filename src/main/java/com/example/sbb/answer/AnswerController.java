@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/answer")
 @RequiredArgsConstructor // 변수를 포함하는 생성자를 자동으로 생성.
@@ -86,19 +88,19 @@ public class AnswerController {
 //    }
 
 
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #username == answer.author.username)")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String answerModify(AnswerForm answerForm, @PathVariable("id") Integer id, @AuthenticationPrincipal UserDetails userDetails) {
         Answer answer = this.answerService.getAnswer(id);
         if (userDetails.getUsername().equals(answer.getAuthor().getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             answerForm.setContent(answer.getContent());
-            return "question_form";
+            return "answer_form";
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #username == answer.author.username)")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String answerModify(@Valid AnswerForm answerForm, @PathVariable("id") Integer id, BindingResult bindingResult,
                                @AuthenticationPrincipal UserDetails userDetails) {
@@ -114,12 +116,12 @@ public class AnswerController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #username == answer.author.username)")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String answerDelete(@PathVariable("id") Integer id, @AuthenticationPrincipal UserDetails userDetails) {
         Answer answer = this.answerService.getAnswer(id);
 
-        if (!userDetails.getUsername().equals(answer.getAuthor().getUsername()) || !userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        if (userDetails.getUsername().equals(answer.getAuthor().getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             // 현재 사용자가 질문 작성자거나 관리자인 경우에만 삭제 허용
             this.answerService.delete(answer);
             return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
@@ -128,13 +130,20 @@ public class AnswerController {
         }
     }
 
+    @ResponseBody
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
-    public String answerVote(Principal principal, @PathVariable("id") Integer id) {
+    public ResponseEntity<Map<String, Object>> answerVote(Principal principal, @PathVariable("id") Integer id) {
         Answer answer = this.answerService.getAnswer(id);
         SiteUser siteUser = this.userService.getUser(principal.getName());
+
+        // 이미 해당 사용자가 이 답변을 추천한 경우, JSON 응답으로 메시지 반환
+        if (answer.getVoter().contains(siteUser)) {
+            return ResponseEntity.ok(Map.of("alreadyVoted", true, "updatedCount", answer.getVoter().size()));
+        }
+
         this.answerService.vote(answer, siteUser);
-        return String.format("redirect:/question/detail/%s#answer_%s",
-                answer.getQuestion().getId(), answer.getId());
+        return ResponseEntity.ok(Map.of("alreadyVoted", false, "updatedCount", answer.getVoter().size()));
     }
+
 }

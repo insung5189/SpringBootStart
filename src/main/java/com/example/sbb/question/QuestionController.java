@@ -10,6 +10,7 @@ import com.example.sbb.user.UserService;
 import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 //@Slf4j
 @RequiredArgsConstructor
@@ -115,7 +117,7 @@ public class QuestionController {
     public String questionDelete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("id") Integer id) {
         Question question = this.questionService.getQuestion(id);
 
-        if (!userDetails.getUsername().equals(question.getAuthor().getUsername()) || !userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        if (userDetails.getUsername().equals(question.getAuthor().getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             // 현재 사용자가 질문 작성자거나 관리자인 경우에만 삭제 허용
             this.questionService.delete(question);
             return "redirect:/";
@@ -124,13 +126,23 @@ public class QuestionController {
         }
     }
 
+    @ResponseBody
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
-    public String questionVote(Principal principal, @PathVariable("id") Integer id) {
+    public ResponseEntity<?> questionVote(Principal principal, @PathVariable("id") Integer id) {
         Question question = this.questionService.getQuestion(id);
         SiteUser siteUser = this.userService.getUser(principal.getName());
+
+        // 이미 해당 사용자가 이 질문을 추천한 경우, JSON 응답으로 메시지 반환
+        if (question.getVoter().contains(siteUser)) {
+            return ResponseEntity.ok(Map.of("alreadyVoted", true));
+        }
+
         this.questionService.vote(question, siteUser);
-        return String.format("redirect:/question/detail/%s", id);
+
+        // 업데이트된 추천 수를 반환
+        int updatedCount = question.getVoter().size();
+        return ResponseEntity.ok(Map.of("alreadyVoted", false, "updatedCount", updatedCount));
     }
 
 

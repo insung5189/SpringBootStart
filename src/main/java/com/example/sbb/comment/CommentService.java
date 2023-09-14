@@ -38,5 +38,17 @@ public class CommentService {
         this.commentRepository.save(c1);
         return c1;
     }
+    public void modify(Comment comment, String content) {
+        comment.setComment(content);
+        comment.setModifyDate(LocalDateTime.now());
+        this.commentRepository.save(comment);
+    }
+    public void delete(Comment comment) {
+        this.commentRepository.delete(comment);
+    }
+    public void vote(Comment comment, SiteUser siteUser) {
+        comment.getVoter().add(siteUser);
+        this.commentRepository.save(comment);
+    }
 
 }

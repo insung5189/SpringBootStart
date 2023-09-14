@@ -29,7 +29,7 @@
     <!--부트스트랩-->
     <!--<div th:text="${question.content}"></div>-->
     <!--Controller에 detail메서드와 연결됨-->
-    <div class="card my-3" style="border-radius : 20px; background: #f9faf2;">
+    <div class="card my-3 element" style="border-radius : 20px; background: #f9faf2;">
         <div class="card-body">
             <div class="card-text" th:utext="${@commonUtil.markdown(question.content)}"></div>
             <div class="d-flex justify-content-end">
@@ -45,21 +45,30 @@
                 </div>
             </div>
             <div class="my-3">
-                <a class="recommend btn btn-sm btn-outline-secondary" href="javascript:void(0);"
+                <!-- 질문 추천 버튼 -->
+                <a class="recommend-button question recommend btn btn-sm btn-outline-secondary"
+                   href="javascript:void(0);"
+                   data-type="question"
                    th:data-uri="@{|/question/vote/${question.id}|}">
                     추천
-                    <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
+                    <span id="question-recommend-count-${question.id}" class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
                 </a>
+                <!-- 질문 수정 버튼 -->
                 <a class="btn btn-sm btn-outline-secondary" th:href="@{|/question/modify/${question.id}|}"
                    sec:authorize="isAuthenticated()"
+                   data-type="question"
                    th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (question.author != null and #authentication.principal.username == question.author.username)}"
+                   onclick="return confirm('질문을 수정하시겠습니까?')"
                    th:text="수정"></a>
-                <a class="delete btn btn-sm btn-outline-secondary" href="javascript:void(0);"
+
+                <!-- 질문 삭제 버튼 -->
+                <a class="delete btn btn-sm btn-outline-secondary"
+                   href="javascript:void(0);"
                    sec:authorize="isAuthenticated()"
                    th:data-uri="@{|/question/delete/${question.id}|}"
+                   data-type="question"
                    th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (question.author != null and #authentication.principal.username == question.author.username)}"
                    th:text="삭제"></a>
-
             </div>
         </div>
     </div>
@@ -71,7 +80,7 @@
         th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5> <!--부트스트랩-->
 
     <!--답변 반복 시작-->
-    <div class="card my-3" style="border-radius : 20px; background: #f9faf2;" th:each="answer : ${answerList}">
+    <div class="card my-3 element" style="border-radius : 20px; background: #f9faf2;" th:each="answer : ${question.answerList}">
         <a th:id="|answer_${answer.id}|"></a>
         <!--answer/detail/로 연결되는 앵커-->
         <a class="item-text-1" th:href="@{|/answer/detail/${answer.id}|}">
@@ -98,23 +107,29 @@
                 <!--추천, 수정, 삭제 영역 작성자로 로그인했을때만 노출되게 설정-->
                 <div class="my-3">
                     <!--자바스크립트를 이용해서 추천버튼을 눌렀을 때 추천수가 올라가고 팝업으로 추천하겠는지 물어보는 팝업을 호출-->
-                    <a class="recommend btn btn-sm btn-outline-secondary" href="javascript:void(0);"
+                    <!-- 답변 추천 버튼 -->
+                    <a class="recommend-button answer recommend btn btn-sm btn-outline-secondary"
+                       href="javascript:void(0);"
+                       data-type="answer"
                        th:data-uri="@{|/answer/vote/${answer.id}|}">
                         추천
-                        <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span>
+                        <span id="answer-recommend-count-${answer.id}" class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span>
                     </a>
 
-                    <!--수정버튼-->
+                    <!--답변 수정 버튼-->
                     <a class="btn btn-sm btn-outline-secondary"
                        th:href="@{|/answer/modify/${answer.id}|}"
                        sec:authorize="isAuthenticated()"
+                       data-type="answer"
                        th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username)}"
+                       onclick="return confirm('답변을 수정하시겠습니까?')"
                        th:text="수정"></a>
 
-                    <!--삭제버튼-->
+                    <!--답변 삭제 버튼-->
                     <a class="delete btn btn-sm btn-outline-secondary" href="javascript:void(0);"
                        sec:authorize="isAuthenticated()"
                        th:data-uri="@{|/answer/delete/${answer.id}|}"
+                       data-type="answer"
                        th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username)}"
                        th:text="삭제"></a>
                     <button class="btn btn-sm btn-outline-secondary reply-button">댓글 입력</button>
@@ -125,19 +140,58 @@
                                 <textarea sec:authorize="isAnonymous()" disabled th:field="*{comment}" class="form-control" rows="3"></textarea>
                                 <textarea sec:authorize="isAuthenticated()" th:field="*{comment}" class="form-control" rows="3"></textarea>
                             </div>
-                            <div class="form-group text-right">
+                            <div class="d-flex form-group text-right justify-content-end">
                                 <button type="submit" class="btn btn-primary" style="margin-top : 10px;">댓글 저장</button>
                             </div>
                         </form>
                     </div>
-                    <!--대댓글 반복 시작, question/detail/에서 답변 카드보고 안에 들어갈 수 있도록 설계중-->
+                    <!--댓글 반복 시작, question/detail/에서 답변 카드보고 안에 들어갈 수 있도록 설계중-->
                     <div>
-                        <div class="card my-3" style="border-radius : 20px; background: #fcf2f2;" th:each="comment : ${answer.commentList}"> <!--comment본문 반복.-->
+
+                        <div class="card my-3 element" style="border-radius : 20px; background: #fcf2f2;" th:each="comment : ${answer.commentList}"> <!--comment본문 반복.-->
+                            <a th:id="|comment_${comment.id}|"></a>
                             <!--마크다운-->
-                            <div class="card-text" style="padding : 16px;"
+                            <div class="card-text comment-content" style="padding : 16px;"
                                  th:utext="${@commonUtil.markdown(comment.comment)}"></div>
+                            <form th:action="@{|/comment/modify/${comment.id}|}" th:object="${commentForm}" method="post" class="comment-edit-form" style="display: none;">
+                                <input class="m-3" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+                                <div class="m-3">
+                                    <label for="comment" class="mx-3 fw-bold">수정할 내용</label>
+                                <div class="mb-3 d-flex align-items-center">
+                                    <textarea th:field="*{comment}" class="form-control m-3" rows="5"></textarea>
+                                <input type="submit" value="저장하기" class="btn btn-primary my-2">
+                                </div>
+                                </div>
+                            </form>
                             <!--수정일, 생성일, 작성자 박스 오른쪽 배치-->
-                            <div class="d-flex justify-content-end" style="margin : 12px;">
+                            <div class="d-flex justify-content-between mx-3">
+                                <div class="my-3">
+                                    <!-- 댓글 추천 버튼 -->
+                                    <a class="recommend-button comment recommend btn btn-sm btn-outline-secondary"
+                                       href="javascript:void(0);"
+                                       data-type="comment"
+                                       th:data-uri="@{|/comment/vote/${comment.id}|}">
+                                        추천
+                                        <span id="comment-recommend-count-${comment.id}" class="badge rounded-pill bg-success" th:text="${#lists.size(comment.voter)}"></span>
+                                    </a>
+                                    <!-- 댓글 수정 버튼 -->
+                                    <a class="btn btn-sm btn-outline-secondary reply-modify-button" th:href="@{|/comment/modify/${comment.id}|}"
+                                       sec:authorize="isAuthenticated()"
+                                       data-type="comment"
+                                       th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (comment.author != null and #authentication.principal.username == comment.author.username)}"
+                                       th:text="수정"></a>
+
+                                    <!-- 댓글 삭제 버튼 -->
+                                    <a class="delete btn btn-sm btn-outline-secondary"
+                                       href="javascript:void(0);"
+                                       sec:authorize="isAuthenticated()"
+                                       th:data-uri="@{|/comment/delete/${comment.id}|}"
+                                       data-type="comment"
+                                       th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (comment.author != null and #authentication.principal.username == comment.author.username)}"
+                                       th:text="삭제"></a>
+                                </div>
+                                <div class="mx-3">
                                 <div class="badge bg-light text-dark p-2 text-start mx-3"
                                      th:if="${comment.modifyDate != null}">
                                     <div class="mb-2">modified at</div>
@@ -150,14 +204,13 @@
                                     </div>
                                     <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                                 </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </a>
-
     </div>
 
     <!--답변 등록상자 넣기-->
@@ -176,33 +229,176 @@
 </div>
 </body>
 <script layout:fragment="script" type='text/javascript'>
+// 댓글 입력 버튼 클릭 이벤트
+const reply_buttons = document.getElementsByClassName("reply-button");
+Array.from(reply_buttons).forEach(function (button) {
+  button.addEventListener("click", function () {
+    const commentForm = this.closest(".card").querySelector(".comment-form");
+    if (commentForm.style.display === "block") {
+      commentForm.style.display = "none"; // 댓글 입력 폼 숨기기
+    } else {
+      commentForm.style.display = "block"; // 댓글 입력 폼 보이기
+    }
+  });
+});
+
+// 댓글 폼 제출 이벤트
+const comment_forms = document.getElementsByClassName("comment-form");
+Array.from(comment_forms).forEach(function (form) {
+    form.addEventListener("submit", function (event) {
+        alert("댓글이 등록되었습니다.");
+    });
+});
+
+// Comment edit button click event
+const comment_edit_buttons = document.getElementsByClassName("reply-modify-button");
+Array.from(comment_edit_buttons).forEach(function(button) {
+  button.addEventListener('click', function(event) {
+    const card = this.closest('.card');
+    const content = card.querySelector('.comment-content');
+    const form = card.querySelector('.comment-edit-form');
+
+    // Ask for confirmation before showing the edit form
+    if (confirm('댓글을 수정하시겠습니까?')) {
+      // Toggle display of the content and the form
+      if (content.style.display === 'none') {
+        content.style.display = 'block';
+        form.style.display = 'none';
+      } else {
+        content.style.display = 'none';
+        form.style.display = 'block';
+
+        // Populate the textarea in the form with the existing comment text.
+        // Assuming that you have a <textarea> element with class "form-control"
+        const textarea = form.querySelector('textarea.form-control');
+
+        if (textarea) {
+          textarea.value = content.textContent.trim();
+        }
+      }
+    }
+
+    event.preventDefault();  // Prevent default action (navigation)
+  });
+});
+
+// 댓글 수정 폼 제출 이벤트
+const comment_edit_forms = document.getElementsByClassName("comment-edit-form");
+Array.from(comment_edit_forms).forEach(function (form) {
+    form.addEventListener("submit", function (event) {
+        alert("댓글이 정상적으로 수정되었습니다.");
+    });
+});
+
+
+// 삭제 버튼 클릭 이벤트
 const delete_elements = document.getElementsByClassName("delete");
-Array.from(delete_elements).forEach(function(element) {
-    element.addEventListener('click', function() {
-        if(confirm("정말로 삭제하시겠습니까?")) {
-            location.href = this.dataset.uri;
-        };
-    });
+Array.from(delete_elements).forEach(function (element) {
+  element.addEventListener("click", function (event) {
+    // 질문인 경우
+    if (this.dataset.type === "question") {
+      if (!confirm('질문을 삭제하시겠습니까? 삭제된 질문은 되돌릴 수 없습니다.')) {
+        event.preventDefault(); // 클릭 이벤트를 취소하여 삭제 동작을 막음
+      } else {
+        location.href = this.dataset.uri;
+        alert("질문이 정상적으로 삭제되었습니다.");
+      }
+    }
+    // 답변인 경우
+    else if (this.dataset.type === "answer") {
+      if (!confirm('답변을 삭제하시겠습니까? 삭제된 답변은 되돌릴 수 없습니다.')) {
+        event.preventDefault(); // 클릭 이벤트를 취소하여 삭제 동작을 막음
+      } else {
+        location.href = this.dataset.uri;
+        alert("답변이 정상적으로 삭제되었습니다.");
+      }
+    }
+    // 댓글인 경우
+    else if (this.dataset.type === "comment") {
+      if (!confirm('댓글을 삭제하시겠습니까? 삭제된 댓글은 되돌릴 수 없습니다.')) {
+        event.preventDefault(); // 클릭 이벤트를 취소하여 삭제 동작을 막음
+      } else {
+        location.href = this.dataset.uri;
+        alert("댓글이 정상적으로 삭제되었습니다.");
+      }
+    }
+  });
 });
-const recommend_elements = document.getElementsByClassName("recommend");
-Array.from(recommend_elements).forEach(function(element) {
-    element.addEventListener('click', function() {
-        if(confirm("정말로 추천하시겠습니까?")) {
-            location.href = this.dataset.uri;
-        };
-    });
-});
-    // 댓글 입력 버튼 클릭 이벤트
-   const reply_buttons = document.getElementsByClassName("reply-button");
-    Array.from(reply_buttons).forEach(function(button) {
-        button.addEventListener('click', function() {
-            const commentForm = this.closest('.card').querySelector('.comment-form');
-            if (commentForm.style.display === "block") {
-                commentForm.style.display = "none"; // 댓글 입력 폼 숨기기
+
+$(document).ready(function() {
+    // 공통으로 사용할 추천 함수
+    function vote(type, uri, element, id) {
+      const confirmationMessage = `이 ${
+        type === "question" ? "질문" : "답변"
+      }을 추천하시겠습니까?`;
+
+      if (confirm(confirmationMessage)) {
+        $.ajax({
+          type: "GET",
+          url: uri,
+          dataType: "json",
+          success: function (data) {
+            // 기존의 '추천 수' span 태그 제거
+            $(`.${type}.recommend[data-uri="${uri}"]`).find(".badge.rounded-pill.bg-success").remove();
+
+            if (data.alreadyVoted) {
+              alert("이미 추천하셨습니다.");
             } else {
-                commentForm.style.display = "block"; // 댓글 입력 폼 보이기
+              alert(`${type === "question" ? "질문" : "답변"}이 추천되었습니다.`);
             }
-        });
-    });
+
+            // 업데이트된 추천 수를 가져와서 해당 요소 업데이트
+            const updatedCount = data.updatedCount;
+
+             // 새로운 '추천 수' span 태그 생성 및 추가
+             $('<span></span>', {
+                id: `${type}-recommend-count-${id}`,
+                class: 'badge rounded-pill bg-success',
+                text: updatedCount
+             }).appendTo(`.${type}.recommend[data-uri="${uri}"]`);
+           },
+           error: function (xhr, status, error) {
+             console.error("Error checking if already voted:", error);
+             alert(
+               "추천이 정상적으로 처리되지 않았습니다.\n페이지를 새로고침 후 다시 시도해주세요."
+             );
+           },
+         });
+       } else {
+         alert(`${type === "question" ? "질문" : "답변"} 추천을 취소하였습니다.`);
+       }
+    }
+// 질문 추천 버튼 클릭 이벤트
+$(".recommend-button.question").click(function () {
+  const dataType = "question";
+  const uri = $(this).data("uri");
+  const questionId = $(this).data("question-id");
+  const element = $(this).closest(".element");
+
+  vote(dataType, uri, element, questionId);
+});
+
+// 답변 추천 버튼 클릭 이벤트
+$(".recommend-button.answer").click(function () {
+  const dataType = "answer";
+  const uri = $(this).data("uri");
+  const answerId = $(this).data("answer-id");
+  const element = $(this).closest(".element");
+
+  vote(dataType, uri, element, answerId);
+});
+
+// 댓글 추천 버튼 클릭 이벤트
+$(".recommend-button.comment").click(function () {
+  const dataType = "comment";
+  const uri = $(this).data("uri");
+  const commentId = $(this).data("comment-id");
+  const element = $(this).closest(".element");
+
+  vote(dataType, uri, element, commentId);
+});
+});
+
+
 </script>
 </html>

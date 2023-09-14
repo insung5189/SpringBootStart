@@ -42,4 +42,10 @@ public class UserService {
             throw new DataNotFoundException("siteuser not found");
         }
     }
+
+    public void updatePassword(String username, String email, String password) {
+        SiteUser user = new SiteUser();
+        user.setPassword(passwordEncoder.encode(password));
+        this.userRepository.save(user);
+    }
 }

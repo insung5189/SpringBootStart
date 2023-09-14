@@ -11,15 +11,35 @@
 </head>
 <div class="container" layout:fragment="content">
   <h5 class="my-3 border-bottom pb-2">답변 수정</h5>
-  <form method="post" th:object="${answerForm}">
+  <form method="post" th:object="${answerForm}" id="answerForm">
     <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
     <div th:replace="~{form_errors :: formErrorsFragment}"></div>
     <div class="mb-3">
       <label class="form-label" for="content">내용</label>
       <textarea class="form-control" rows="10" th:field="*{content}"></textarea>
     </div>
-    <input class="btn btn-primary my-2" type="submit" value="저장하기">
+    <input class="btn btn-primary my-2" type="submit" value="저장하기" id="saveButton">
   </form>
-</div>
+<script>
+    document.getElementById("saveButton").addEventListener("click", function (e) {
+        e.preventDefault(); // 기본 동작(폼 제출) 방지
 
+        // 메시지 변수 정의
+        var confirmationMessage = "저장하시겠습니까?";
+        var successMessage = "저장이 완료되었습니다.";
+        var cancelMessage = "작성이 끝나면 저장 버튼을 눌러주세요.";
+
+        // 확인 대화 상자 표시
+        if (confirm(confirmationMessage)) {
+            // 저장 완료 메시지 표시
+            alert(successMessage);
+            // 폼 제출
+            document.getElementById("answerForm").submit();
+        } else {
+            // 취소 메시지 표시
+            alert(cancelMessage);
+        }
+    });
+</script>
+</div>
 </html>
