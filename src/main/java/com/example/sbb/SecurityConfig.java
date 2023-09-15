@@ -26,8 +26,8 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .requestMatchers("/admin/**").hasRole("ADMIN") // admin으로 시작하는 URL에 대한 접근 권한 설정
+        http.authorizeRequests()
+                .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
                 .requestMatchers("/**").permitAll() // 나머지 URL은 모두 접근 허용
                 .and()
                 .csrf().ignoringRequestMatchers(
