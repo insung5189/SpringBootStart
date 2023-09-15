@@ -3,6 +3,7 @@ package com.example.sbb.admin;
 import com.example.sbb.user.SiteUser;
 import com.example.sbb.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ import java.util.List;
 public class AdminController {
     private final UserService userService;
     private final AdminService adminService;
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public String adminPage(Model model) {
         // 관리자 페이지에 표시할 사용자 목록을 가져온다 (이 데이터는 서비스 계층에서 가져올 것)
@@ -27,7 +28,7 @@ public class AdminController {
         model.addAttribute("userList", userList);
         return "admin";
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/update-role")
     public String updateRole(@RequestParam("userId") Long userId, @RequestParam("newRole") String newRole, RedirectAttributes redirectAttributes) {
         adminService.updateUserRole(userId, newRole);

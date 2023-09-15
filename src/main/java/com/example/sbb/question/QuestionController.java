@@ -135,14 +135,11 @@ public class QuestionController {
 
         // 이미 해당 사용자가 이 질문을 추천한 경우, JSON 응답으로 메시지 반환
         if (question.getVoter().contains(siteUser)) {
-            return ResponseEntity.ok(Map.of("alreadyVoted", true));
+            return ResponseEntity.ok(Map.of("alreadyVoted", true, "updatedCount", question.getVoter().size()));
         }
-
         this.questionService.vote(question, siteUser);
 
-        // 업데이트된 추천 수를 반환
-        int updatedCount = question.getVoter().size();
-        return ResponseEntity.ok(Map.of("alreadyVoted", false, "updatedCount", updatedCount));
+        return ResponseEntity.ok(Map.of("alreadyVoted", false, "updatedCount", question.getVoter().size()));
     }
 
 
