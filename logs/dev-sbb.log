@@ -1873,3 +1873,76 @@ Consider defining a bean of type 'org.springframework.security.oauth2.client.reg
 2023-09-16T02:17:58.571+09:00  INFO 34128 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8020 (http) with context path ''
 2023-09-16T02:17:58.578+09:00  INFO 34128 --- [restartedMain] com.example.sbb.SbbApplication           : Started SbbApplication in 2.78 seconds (process running for 219.776)
 2023-09-16T02:17:58.580+09:00  INFO 34128 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2023-09-16T02:21:28.245+09:00  INFO 34128 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2023-09-16T02:21:28.269+09:00  INFO 34128 --- [Thread-11] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-09-16T02:21:28.277+09:00  INFO 34128 --- [Thread-11] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-16T02:21:28.277+09:00  INFO 34128 --- [Thread-11] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2023-09-16T02:21:28.281+09:00  INFO 34128 --- [Thread-11] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2023-09-16T02:21:28.394+09:00  INFO 34128 --- [restartedMain] com.example.sbb.SbbApplication           : Starting SbbApplication using Java 17.0.6 with PID 34128 (C:\Users\INSEONG\Desktop\국비지원 풀스택\자바 프로젝트\sbb\out\production\classes started by INSEONG in C:\Users\INSEONG\Desktop\국비지원 풀스택\자바 프로젝트\sbb)
+2023-09-16T02:21:28.395+09:00  INFO 34128 --- [restartedMain] com.example.sbb.SbbApplication           : The following 2 profiles are active: "secret", "dev"
+2023-09-16T02:21:28.693+09:00  INFO 34128 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-16T02:21:28.726+09:00  INFO 34128 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 33 ms. Found 4 JPA repository interfaces.
+2023-09-16T02:21:28.844+09:00  INFO 34128 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8020 (http)
+2023-09-16T02:21:28.844+09:00  INFO 34128 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-16T02:21:28.844+09:00  INFO 34128 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
+2023-09-16T02:21:28.884+09:00  INFO 34128 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-16T02:21:28.885+09:00  INFO 34128 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 488 ms
+2023-09-16T02:21:28.963+09:00  INFO 34128 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-09-16T02:21:28.977+09:00  INFO 34128 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2023-09-16T02:21:28.993+09:00  INFO 34128 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection org.mariadb.jdbc.Connection@9045d3e
+2023-09-16T02:21:28.994+09:00  INFO 34128 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2023-09-16T02:21:28.994+09:00  INFO 34128 --- [restartedMain] SQL dialect                              : HHH000400: Using dialect: org.hibernate.dialect.MariaDBDialect
+2023-09-16T02:21:29.279+09:00  INFO 34128 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-09-16T02:21:29.280+09:00  INFO 34128 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-16T02:21:29.360+09:00  WARN 34128 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.example.sbb.user.UserRepository
+2023-09-16T02:21:29.372+09:00  WARN 34128 --- [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'adminController' defined in file [C:\Users\INSEONG\Desktop\국비지원 풀스택\자바 프로젝트\sbb\out\production\classes\com\example\sbb\admin\AdminController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userService' defined in file [C:\Users\INSEONG\Desktop\국비지원 풀스택\자바 프로젝트\sbb\out\production\classes\com\example\sbb\user\UserService.class]: Unsatisfied dependency expressed through constructor parameter 1: No qualifying bean of type 'org.springframework.security.crypto.password.PasswordEncoder' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2023-09-16T02:21:29.373+09:00  INFO 34128 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-16T02:21:29.374+09:00  INFO 34128 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2023-09-16T02:21:29.379+09:00  INFO 34128 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+2023-09-16T02:21:29.380+09:00  INFO 34128 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-09-16T02:21:29.430+09:00  INFO 34128 --- [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2023-09-16T02:21:29.472+09:00 ERROR 34128 --- [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 1 of constructor in com.example.sbb.user.UserService required a bean of type 'org.springframework.security.crypto.password.PasswordEncoder' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.security.crypto.password.PasswordEncoder' in your configuration.
+
+2023-09-16T02:21:31.043+09:00  INFO 34128 --- [restartedMain] com.example.sbb.SbbApplication           : Starting SbbApplication using Java 17.0.6 with PID 34128 (C:\Users\INSEONG\Desktop\국비지원 풀스택\자바 프로젝트\sbb\out\production\classes started by INSEONG in C:\Users\INSEONG\Desktop\국비지원 풀스택\자바 프로젝트\sbb)
+2023-09-16T02:21:31.044+09:00  INFO 34128 --- [restartedMain] com.example.sbb.SbbApplication           : The following 2 profiles are active: "secret", "dev"
+2023-09-16T02:21:31.368+09:00  INFO 34128 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-16T02:21:31.399+09:00  INFO 34128 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 4 JPA repository interfaces.
+2023-09-16T02:21:31.520+09:00  INFO 34128 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8020 (http)
+2023-09-16T02:21:31.521+09:00  INFO 34128 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-16T02:21:31.522+09:00  INFO 34128 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
+2023-09-16T02:21:31.558+09:00  INFO 34128 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2023-09-16T02:21:31.558+09:00  INFO 34128 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 512 ms
+2023-09-16T02:21:31.643+09:00  INFO 34128 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-09-16T02:21:31.662+09:00  INFO 34128 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2023-09-16T02:21:31.667+09:00  INFO 34128 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection org.mariadb.jdbc.Connection@7e12e698
+2023-09-16T02:21:31.668+09:00  INFO 34128 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2023-09-16T02:21:31.669+09:00  INFO 34128 --- [restartedMain] SQL dialect                              : HHH000400: Using dialect: org.hibernate.dialect.MariaDBDialect
+2023-09-16T02:21:31.859+09:00  INFO 34128 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-09-16T02:21:31.859+09:00  INFO 34128 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-16T02:21:31.947+09:00  WARN 34128 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.example.sbb.user.UserRepository
+2023-09-16T02:21:32.008+09:00  WARN 34128 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.example.sbb.answer.AnswerRepository
+2023-09-16T02:21:32.038+09:00  WARN 34128 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.example.sbb.question.QuestionRepository
+2023-09-16T02:21:32.316+09:00  WARN 34128 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-16T02:21:32.454+09:00  INFO 34128 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@246a4e0d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5b4c6304, org.springframework.security.web.context.SecurityContextHolderFilter@f8551be, org.springframework.security.web.header.HeaderWriterFilter@66dbe177, org.springframework.security.web.csrf.CsrfFilter@6223bdee, org.springframework.security.web.authentication.logout.LogoutFilter@7f380965, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@14fbcda3, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@78270aff, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@d5e40e4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@70b6416d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@63fc3e79, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@11903b1b, org.springframework.security.web.access.ExceptionTranslationFilter@5098782a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@29eac990]
+2023-09-16T02:21:32.504+09:00  INFO 34128 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-09-16T02:21:32.513+09:00  INFO 34128 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8020 (http) with context path ''
+2023-09-16T02:21:32.517+09:00  INFO 34128 --- [restartedMain] com.example.sbb.SbbApplication           : Started SbbApplication in 1.547 seconds (process running for 433.715)
+2023-09-16T02:21:32.519+09:00  INFO 34128 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2023-09-16T02:27:28.339+09:00  INFO 34128 --- [http-nio-8020-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-16T02:27:28.340+09:00  INFO 34128 --- [http-nio-8020-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-09-16T02:27:28.341+09:00  INFO 34128 --- [http-nio-8020-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
