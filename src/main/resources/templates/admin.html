@@ -17,6 +17,7 @@
     <th>ID</th>
     <th>Email</th>
     <th>Username</th>
+    <th>Nickname</th>
     <th>Create Date</th>
     <th>Last Login Date</th>
     <th>Role</th>
@@ -26,9 +27,10 @@
   <tbody>
   <!-- 사용자 목록을 Thymeleaf 반복문을 사용하여 표시 -->
   <tr th:each="user : ${userList}">
-    <td th:text="${user.id}">1</td>
-    <td th:text="${user.email}">user@example.com</td>
-    <td th:text="${user.username}">사용자1</td>
+    <td th:text="${user.id}"></td>
+    <td th:text="${user.email}"></td>
+    <td th:text="${user.username}"></td>
+    <td th:text="${user.nickName}"></td>
     <td>
       <!-- createDate가 null 또는 비어있을 때 "알 수 없음" 출력 -->
       <span th:if="${user.createDate == null or user.createDate == ''}">알 수 없음</span>
