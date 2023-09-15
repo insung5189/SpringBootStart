@@ -279,6 +279,8 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         String roleAuthority = role.getAuthority(); // 권한의 문자열 값 가져오기
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(roleAuthority)); // 권한 배열에 해당 멤버의 권한 추가
+        siteUser.setLastLoginDate(LocalDateTime.now());
+        userRepository.save(siteUser);
         return new UserContext(siteUser, authorities, attributes, userNameAttributeName); // 종합된 멤버의 권한으로 로그인 처리
     }
 
