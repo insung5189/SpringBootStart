@@ -41,3 +41,11 @@ custom:
   resourcePath: file:///Users/INSEONG/Desktop/img_upload/
   requestPath: /img_upload/**
   originPath: /img_upload/
+logging:
+  file:
+    name: logs/dev-sbb.log
+  logback:
+    rollingpolicy:
+      max-history: 7
+      max-file-size: 10MB
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}-%i.log

@@ -40,3 +40,11 @@ custom:
   resourcePath: file:///img_upload/
   requestPath: /img_upload/**
   originPath: /img_upload/
+logging:
+  file:
+    name: logs/prod-sbb.log
+  logback:
+    rollingpolicy:
+      max-history: 30
+      max-file-size: 100MB
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}-%i.log
