@@ -1,6 +1,5 @@
 package com.example.sbb;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,17 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-
-    @Autowired
-    private OAuth2UserService oAuth2UserService;
-
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
@@ -37,19 +30,10 @@ public class SecurityConfig {
                     .addHeaderWriter(new XFrameOptionsHeaderWriter(
                         XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
                 .and()
-                .formLogin(
-                        formLogin -> formLogin
-                                .loginPage("/user/login") // GET
-                                .loginProcessingUrl("/user/login") // POST
-                )
-                .oauth2Login(
-                        oauth2Login -> oauth2Login
-                                .loginPage("/user/login")
-                                .userInfoEndpoint(
-                                        userInfoEndpoint -> userInfoEndpoint
-                                                .userService(oAuth2UserService)
-                                )
-                )
+                    .formLogin()
+                    .loginPage("/user/login")
+                    .defaultSuccessUrl("/")
+                .and()
                     .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                     .logoutSuccessUrl("/")

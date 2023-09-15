@@ -23,7 +23,6 @@
         <input type="submit" value="답변목록보기">
     </a> <!--답변 목록으로 돌아가는 앵커태그-->
 
-    <a th:href="@{|/question/detail/${answer.question.id}|}">
     <div class="card my-3"><!--부트스트랩-->
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
@@ -35,7 +34,6 @@
             </div>
         </div>
     </div><!--부트스트랩-->
-    </a>
 
 
     <input class="list_btn_style" onclick="history.back()" type="button" value="뒤로가기">
