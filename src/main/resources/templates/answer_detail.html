@@ -23,17 +23,19 @@
         <input type="submit" value="답변목록보기">
     </a> <!--답변 목록으로 돌아가는 앵커태그-->
 
-    <div class="card my-3"><!--부트스트랩-->
-        <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
-            <!--연결을 구분하기 쉽게 하기 위해서 answer 라고 사용함. Controller에 detail메서드와 연결됨-->
-            <div class="d-flex justify-content-end">
-                <div class="badge bg-light text-dark p-2 text-start">
-                    <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+    <a th:href="@{|/question/detail/${answer.question.id}|}">
+        <div class="card my-3"><!--부트스트랩-->
+            <div class="card-body">
+                <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
+                <!--연결을 구분하기 쉽게 하기 위해서 answer 라고 사용함. Controller에 detail메서드와 연결됨-->
+                <div class="d-flex justify-content-end">
+                    <div class="badge bg-light text-dark p-2 text-start">
+                        <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div><!--부트스트랩-->
+        </div><!--부트스트랩-->
+    </a>
 
 
     <input class="list_btn_style" onclick="history.back()" type="button" value="뒤로가기">
