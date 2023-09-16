@@ -57,7 +57,7 @@
                 <a class="btn btn-sm btn-outline-secondary" th:href="@{|/question/modify/${question.id}|}"
                    sec:authorize="isAuthenticated()"
                    data-type="question"
-                   th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (question.author != null and #authentication.principal.username == question.author.username)}"
+                   th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_SUPERADMIN'')') or (question.author != null and #authentication.principal.username == question.author.username)}"
                    onclick="return confirm('질문을 수정하시겠습니까?')"
                    th:text="수정"></a>
 
@@ -67,7 +67,7 @@
                    sec:authorize="isAuthenticated()"
                    th:data-uri="@{|/question/delete/${question.id}|}"
                    data-type="question"
-                   th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (question.author != null and #authentication.principal.username == question.author.username)}"
+                   th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_SUPERADMIN'')') or (question.author != null and #authentication.principal.username == question.author.username)}"
                    th:text="삭제"></a>
             </div>
         </div>
@@ -121,7 +121,7 @@
                        th:href="@{|/answer/modify/${answer.id}|}"
                        sec:authorize="isAuthenticated()"
                        data-type="answer"
-                       th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username)}"
+                       th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_SUPERADMIN'')') or (answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username)}"
                        onclick="return confirm('답변을 수정하시겠습니까?')"
                        th:text="수정"></a>
 
@@ -130,7 +130,7 @@
                        sec:authorize="isAuthenticated()"
                        th:data-uri="@{|/answer/delete/${answer.id}|}"
                        data-type="answer"
-                       th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username)}"
+                       th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_SUPERADMIN'')') or (answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username)}"
                        th:text="삭제"></a>
                     <button class="btn btn-sm btn-outline-secondary reply-button">댓글 입력</button>
                     <div class="my-3">
@@ -159,7 +159,7 @@
                                 <div class="m-3">
                                     <label for="comment" class="mx-3 fw-bold">수정할 내용</label>
                                     <div class="mb-3 d-flex align-items-center">
-                                        <textarea th:field="*{comment}" class="form-control m-3" rows="5"></textarea>
+                                        <textarea id="comment" th:field="*{comment}" class="form-control m-3" rows="5"></textarea>
                                         <input type="submit" value="저장하기" class="btn btn-primary my-2">
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@
                                     <a class="btn btn-sm btn-outline-secondary reply-modify-button" th:href="@{|/comment/modify/${comment.id}|}"
                                        sec:authorize="isAuthenticated()"
                                        data-type="comment"
-                                       th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (comment.author != null and #authentication.principal.username == comment.author.username)}"
+                                       th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_SUPERADMIN'')') or (comment.author != null and #authentication.principal.username == comment.author.username)}"
                                        th:text="수정"></a>
 
                                     <!-- 댓글 삭제 버튼 -->
@@ -188,7 +188,7 @@
                                        sec:authorize="isAuthenticated()"
                                        th:data-uri="@{|/comment/delete/${comment.id}|}"
                                        data-type="comment"
-                                       th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (comment.author != null and #authentication.principal.username == comment.author.username)}"
+                                       th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_SUPERADMIN'')') or (comment.author != null and #authentication.principal.username == comment.author.username)}"
                                        th:text="삭제"></a>
                                 </div>
                                 <div class="mx-3">

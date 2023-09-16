@@ -49,12 +49,15 @@ public class QuestionService {
         return this.questionRepository.findAll();
     }
 
-    public Question getQuestion(Integer id) {// Integer 로 타입이 들어오면 null 값도 허용해줄 수 있음
+    public Question getQuestion(Integer id) {
         Optional<Question> question = this.questionRepository.findById(id);
         if (question.isPresent()) {
-            return question.get();
+            Question question1 = question.get();
+            question1.setView(question1.getView()+1);
+            this.questionRepository.save(question1);
+            return question1;
         } else {
-            throw new DataNotFoundException("question not found"); // 예외처리로 에러(DataNotFoundException)를 표시
+            throw new DataNotFoundException("question not found");
         }
     }
 

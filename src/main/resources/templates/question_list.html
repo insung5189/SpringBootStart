@@ -1,7 +1,7 @@
 <!doctype html>
 <!-- 느낌표(!)를 누르고 tab을 입력하면 emmet이라고 해서 기본 세팅이 쭉 나온다. -->
 <html lang="ko" layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
@@ -45,7 +45,9 @@
             <th>답변</th>
             <th>글쓴이</th>
             <th>질문 작성일시</th>
-            <th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">수정 / 삭제</th>
+            <th>조회</th>
+            <th>추천</th>
+            <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')">수정 / 삭제</th>
         </tr>
         </thead>
         <thead class="table-info">
@@ -55,6 +57,9 @@
             <th class="text-center">-</th>
             <th class="text-center">관리자</th>
             <th class="text-center">2023-05-13 12:48</th>
+            <th class="text-center">-</th>
+            <th class="text-center">-</th>
+            <th class="text-center" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')">-</th>
         </tr>
         </thead>
         <thead class="table-info">
@@ -64,6 +69,9 @@
             <th class="text-center">-</th>
             <th class="text-center">관리자</th>
             <th class="text-center">2023-05-28 13:24</th>
+            <th class="text-center">-</th>
+            <th class="text-center">-</th>
+            <th class="text-center" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')">-</th>
         </tr>
         </thead>
         <tbody>
@@ -86,7 +94,9 @@
                 <span th:if="${question.author != null}" th:text="${question.author.username}"></span>
             </td>
             <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td><!-- 낱개의 객체로 출력하는 것 -->
-            <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <td th:text="${question.view}"></td>
+            <td th:text="${#lists.size(question.voter)}"></td>
+            <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')">
                 <a href="javascript:void(0);"
                    th:data-uri="@{/question/delete/{id}(id=${question.id})}"
                    onclick="confirmDelete(event)">삭제</a>
