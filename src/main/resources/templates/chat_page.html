@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Chat Application</title>
+  <!-- CSRF 토큰 값 -->
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+  <style>
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 90vh; /* 화면 높이의 90%를 사용합니다. */
+      justify-content: flex-end; /* 채팅창을 아래로 정렬 */
+    }
+
+    .chat-content {
+      flex-grow: 1; /* 채팅창이 화면을 채우도록 확장 */
+      overflow-y: scroll;
+    }
+
+    .line {
+      margin-top: 10px;
+      display: flex;
+    }
+
+    .chat-box {
+      background: #eee;
+      padding: 5px;
+      max-width: 300px; /* 최대 300px 까지 넓히도록 설정 */
+      word-wrap: break-word; /* 긴 텍스트가 넘칠 때 줄 바꿈 */
+    }
+
+    .mine {
+      margin-left: auto;
+    }
+
+    .blue-box {
+      background: skyblue;
+    }
+
+    .timestamp {
+      margin-left: 10px;
+      color: #888;
+      font-size: 12px;
+    }
+
+    /* 채팅 입력창 스타일 */
+    .input-container {
+      display: flex;
+      background: #f5f5f5;
+      padding: 10px;
+      justify-content : center;
+    }
+
+    #input {
+      width: 100%;
+      padding: 5px;
+      border: none;
+      border-radius: 5px;
+      max-width: 80%; /* 최대 300px 까지 넓히도록 설정 */
+      margin : 0 10px;
+    }
+
+    #send {
+      padding: 5px 10px;
+      background: #007bff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body layout:fragment="content">
+
+<div class="chat-container">
+  <div class="chat-content" id="chatContent">
+    <!-- 인사말 추가 -->
+    <div class="line">
+      <span class="chat-box blue-box">Hi, sweetheart?</span>
+      <span class="timestamp"></span>
+    </div>
+  </div>
+
+  <div class="input-container">
+    <textarea class="chat-box" id="input" rows="1" placeholder="메시지 입력..."></textarea>
+    <button id="send">전송</button>
+  </div>
+</div>
+
+<input type="hidden" id="csrf" th:value="${_csrf.token}"/> <!-- CSRF 토큰 추가 -->
+
+<script>
+  // 스크롤을 아래로 이동하는 함수
+  function scrollToBottom() {
+    var chatContent = document.getElementById('chatContent');
+    chatContent.scrollTop = chatContent.scrollHeight;
+  }
+
+  // Enter 키를 눌렀을 때 작동하는 함수
+  function handleKeyPress(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+  }
+
+  // 전송 버튼을 클릭하거나 Enter 키를 눌렀을 때 호출되는 함수
+  function sendMessage() {
+    var csrfToken = document.querySelector('#csrf').getAttribute('value'); // CSRF 토큰 가져오기
+    var userMessage = document.querySelector('#input').value;
+
+    // 사용자의 메시지 출력 (오른쪽 정렬)
+    var userTemplate = `
+        <div class="line">
+            <span class="chat-box mine">${userMessage}</span>
+            <span class="timestamp">${new Date().toLocaleString()}</span>
+        </div>`;
+    document.querySelector('.chat-content').insertAdjacentHTML('beforeend', userTemplate);
+
+    // 스크롤을 아래로 이동
+    scrollToBottom();
+
+    // 입력창 초기화
+    document.querySelector('#input').value = '';
+
+    // 서버에 메시지 보내고 응답 받기
+    var requestData = {
+      "model": "text-davinci-003",
+      "prompt": userMessage,
+      "max_tokens": 7,
+      "temperature": 0.0
+    };
+
+    fetch('/chat/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken // CSRF 토큰 헤더에 추가
+      },
+      body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      // 봇의 응답 출력 (왼쪽 정렬)
+      var botTemplate = `
+          <div class="line">
+              <span class="chat-box blue-box">${data.message}</span>
+              <span class="timestamp">${new Date().toLocaleString()}</span>
+          </div>`;
+      document.querySelector('.chat-content').insertAdjacentHTML('beforeend', botTemplate);
+
+      // 스크롤을 아래로 이동
+      scrollToBottom();
+    });
+  }
+
+  document.querySelector('#send').addEventListener('click', sendMessage);
+  document.querySelector('#input').addEventListener('keypress', handleKeyPress);
+</script>
+</body>
+</html>

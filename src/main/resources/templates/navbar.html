@@ -21,6 +21,10 @@
         <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')">
           <a class="nav-link" th:href="@{/admin}">관리자 페이지</a>
         </li>
+        <!-- 챗봇 페이지 이동 버튼 -->
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/chat/page}">챗봇</a>
+        </li>
       </ul>
     </div>
   </div>

@@ -20,7 +20,6 @@ repositories {
 
 dependencies { // JSON 언어로 작성된 디펜던시
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -34,8 +33,20 @@ dependencies { // JSON 언어로 작성된 디펜던시
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 	implementation 'org.commonmark:commonmark:0.21.0'
 
+	// Spring Boot Web Starter
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Spring Boot JSON Starter
+	implementation 'org.springframework.boot:spring-boot-starter-json'
+
 	// Oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// OPEN AI
+	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.0'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4.1' // 또는 사용하려는 Jackson 버전
 }
 
 tasks.named('test') {

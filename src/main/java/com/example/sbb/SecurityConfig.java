@@ -1,5 +1,8 @@
 package com.example.sbb;
 
+import io.github.flashvayne.chatgpt.dto.ChatRequest;
+import io.github.flashvayne.chatgpt.dto.ChatResponse;
+import io.github.flashvayne.chatgpt.service.ChatgptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.web.client.RestTemplate;
 
 
 @Configuration
@@ -28,10 +32,12 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
+                .requestMatchers("/chat/**").authenticated()
                 .requestMatchers("/**").permitAll() // 나머지 URL은 모두 접근 허용
                 .and()
                 .csrf().ignoringRequestMatchers(
-                        new AntPathRequestMatcher("/h2-console/**"))
+                        new AntPathRequestMatcher("/h2-console/**"),
+                        new AntPathRequestMatcher("/chat/send")) // /chat/ask에 대해 CSRF 보호 기능 비활성화
                 .and()
                 .headers()
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(
@@ -64,5 +70,10 @@ public class SecurityConfig {
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
