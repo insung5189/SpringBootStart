@@ -76,12 +76,13 @@
 
 <div class="chat-container">
   <div class="chat-content" id="chatContent">
-    <!-- 인사말 추가 -->
+    <!-- GPT-3.5 모델의 환영 메시지 -->
     <div class="line">
-      <span class="chat-box blue-box">Hi, sweetheart?</span>
-      <span class="timestamp"></span>
+      <span class="chat-box blue-box" id="welcomeMessage"></span>
+      <span class="timestamp" id="currentTime"></span>
     </div>
   </div>
+
 
   <div class="input-container">
     <textarea class="chat-box" id="input" rows="1" placeholder="메시지 입력..."></textarea>
@@ -111,12 +112,16 @@
     var csrfToken = document.querySelector('#csrf').getAttribute('value'); // CSRF 토큰 가져오기
     var userMessage = document.querySelector('#input').value;
 
+    // 현재 시간을 설정
+    var currentDateTime = new Date().toLocaleString();
+
     // 사용자의 메시지 출력 (오른쪽 정렬)
     var userTemplate = `
-        <div class="line">
-            <span class="chat-box mine">${userMessage}</span>
-            <span class="timestamp">${new Date().toLocaleString()}</span>
-        </div>`;
+      <div class="line">
+        <span class="chat-box mine">${userMessage}</span>
+      </div>
+      <div class="timestamp" style="text-align: right;">${currentDateTime}</div>
+    `;
     document.querySelector('.chat-content').insertAdjacentHTML('beforeend', userTemplate);
 
     // 스크롤을 아래로 이동
@@ -145,16 +150,34 @@
     .then(data => {
       // 봇의 응답 출력 (왼쪽 정렬)
       var botTemplate = `
-          <div class="line">
-              <span class="chat-box blue-box">${data.message}</span>
-              <span class="timestamp">${new Date().toLocaleString()}</span>
-          </div>`;
+        <div class="line">
+          <span class="chat-box blue-box">${data.message}</span>
+        </div>
+        <div class="timestamp" style="text-align: left;">${currentDateTime}</div>
+      `;
       document.querySelector('.chat-content').insertAdjacentHTML('beforeend', botTemplate);
 
       // 스크롤을 아래로 이동
       scrollToBottom();
     });
   }
+
+  // 환영 메시지를 랜덤하게 선택하여 화면에 표시
+  function displayWelcomeMessage() {
+    fetch('/chat/welcome')
+      .then(response => response.json())
+      .then(data => {
+        // 환영 메시지를 화면에 표시
+        document.querySelector('#welcomeMessage').textContent = data.message;
+
+        // 현재 날짜와 시간을 설정
+        var currentDateTime = new Date().toLocaleString();
+        document.querySelector('#currentTime').textContent = currentDateTime;
+      });
+  }
+
+  // 페이지 로드 시 환영 메시지를 표시
+  window.addEventListener('load', displayWelcomeMessage);
 
   document.querySelector('#send').addEventListener('click', sendMessage);
   document.querySelector('#input').addEventListener('keypress', handleKeyPress);
